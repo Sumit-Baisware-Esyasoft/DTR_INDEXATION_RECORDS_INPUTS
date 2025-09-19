@@ -11,7 +11,7 @@ st.title("📑 DTR से Consumer Indexation की प्रक्रिया
 # Input fields
 feeder_code = st.text_input("Feeder Code")
 dtr_code = st.text_input("DTR Code")
-dtr_name = st.text_input("DTR Name")
+dtr_meter_serial = st.text_input("DTR Meter Serial Number")
 
 # --- Custom time picker (slider based) ---
 def custom_time_picker(label):
@@ -35,32 +35,38 @@ dtr_on_time = custom_time_picker("DTR चालू करने का समय
 # Date picker
 date = st.date_input("दिनांक चुनें", datetime.today())
 
+# File names
+excel_file = "records.xlsx"
+csv_file = "records.csv"
+
 # Submit button
 if st.button("Submit"):
-    if feeder_code and dtr_code and dtr_name and dtr_off_time and dtr_on_time and date:
+    if feeder_code and dtr_code and dtr_meter_serial and dtr_off_time and dtr_on_time and date:
         # Prepare data
         new_data = {
             "Feeder Code": feeder_code,
             "DTR Code": dtr_code,
-            "DTR Name": dtr_name,
+            "DTR Meter Serial Number": dtr_meter_serial,
             "DTR बंद करने का समय": dtr_off_time,
             "DTR चालू करने का समय": dtr_on_time,
             "दिनांक": date.strftime("%d-%m-%Y")
         }
 
-        # Convert to DataFrame
         df_new = pd.DataFrame([new_data])
 
-        # File name
-        file_name = "records.xlsx"
-
-        # Append to Excel (create if not exists)
-        if os.path.exists(file_name):
-            df_existing = pd.read_excel(file_name)
+        # ---- Save to Excel ----
+        if os.path.exists(excel_file):
+            df_existing = pd.read_excel(excel_file)
             df_combined = pd.concat([df_existing, df_new], ignore_index=True)
-            df_combined.to_excel(file_name, index=False)
+            df_combined.to_excel(excel_file, index=False)
         else:
-            df_new.to_excel(file_name, index=False)
+            df_new.to_excel(excel_file, index=False)
+
+        # ---- Save to CSV ----
+        if os.path.exists(csv_file):
+            df_new.to_csv(csv_file, mode="a", header=False, index=False, encoding="utf-8")
+        else:
+            df_new.to_csv(csv_file, index=False, encoding="utf-8")
 
         st.success("✅ डेटा सफलतापूर्वक सेव हो गया!")
         st.table(df_new)
