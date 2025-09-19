@@ -12,26 +12,39 @@ st.title("📑 DTR से Consumer Indexation की प्रक्रिया
 feeder_code = st.text_input("Feeder Code")
 dtr_code = st.text_input("DTR Code")
 dtr_name = st.text_input("DTR Name")
-dtr_meter_number = st.text_input("DTR Meter Number")
 
-# Time inputs (12-hour format with AM/PM)
-dtr_off_time = st.time_input("DTR बंद करने का समय", value=None)
-dtr_on_time = st.time_input("DTR चालू करने का समय", value=None)
+# --- Custom time picker (slider based) ---
+def custom_time_picker(label):
+    st.write(f"### {label}")
+    col1, col2, col3 = st.columns([2,2,2])
 
-# Date picker (full calendar)
+    with col1:
+        hour = st.slider(f"{label} - घंटा", 1, 12, 12)
+    with col2:
+        minute = st.slider(f"{label} - मिनट", 0, 59, 0)
+    with col3:
+        am_pm = st.radio(f"{label} - AM/PM", ["AM", "PM"], horizontal=True)
+
+    time_str = f"{hour:02d}:{minute:02d} {am_pm}"
+    return time_str
+
+# Time inputs
+dtr_off_time = custom_time_picker("DTR बंद करने का समय")
+dtr_on_time = custom_time_picker("DTR चालू करने का समय")
+
+# Date picker
 date = st.date_input("दिनांक चुनें", datetime.today())
 
 # Submit button
 if st.button("Submit"):
-    if feeder_code and dtr_code and dtr_name and dtr_meter_number and dtr_off_time and dtr_on_time and date:
+    if feeder_code and dtr_code and dtr_name and dtr_off_time and dtr_on_time and date:
         # Prepare data
         new_data = {
             "Feeder Code": feeder_code,
             "DTR Code": dtr_code,
             "DTR Name": dtr_name,
-            "DTR Meter Number": dtr_meter_number,
-            "DTR बंद करने का समय": dtr_off_time.strftime("%I:%M %p"),
-            "DTR चालू करने का समय": dtr_on_time.strftime("%I:%M %p"),
+            "DTR बंद करने का समय": dtr_off_time,
+            "DTR चालू करने का समय": dtr_on_time,
             "दिनांक": date.strftime("%d-%m-%Y")
         }
 
