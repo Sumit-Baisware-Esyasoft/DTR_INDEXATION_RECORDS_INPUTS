@@ -21,7 +21,7 @@ credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope
 client = gspread.authorize(credentials)
 
 # Open your Google Sheet (make sure this name matches your actual sheet)
-SHEET_NAME = "MyDTRSheet"
+SHEET_NAME = "DTR_Indexation_Records"
 sheet = client.open(SHEET_NAME).sheet1
 
 # --------- Form Inputs ----------
