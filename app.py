@@ -27,7 +27,7 @@ sheet = client.open(SHEET_NAME).sheet1
 # --------- Load Hierarchy File ----------
 try:
     # Replace with your actual file path or keep in repo
-    hierarchy_path = r"DTR_INDEXATION_RECORDS_INPUTS/DTR Master Information 2025-09-22 07-00_21992_batch1.xlsx"
+    hierarchy_path = "DTR_INDEXATION_RECORDS_INPUTS/DTR Master Information 2025-09-22 07-00_21992_batch1.xlsx"
     hierarchy_df = pd.read_excel(hierarchy_path)
 
     st.subheader("📂 DTR Master Data (Reference)")
