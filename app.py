@@ -30,8 +30,8 @@ try:
     hierarchy_path = r"DTR Master Information 2025-09-22 07-00_21992_batch1.xlsx"
     hierarchy_df = pd.read_excel(hierarchy_path)
 
-    st.subheader("📂 DTR Master Data (Reference)")
-    st.dataframe(hierarchy_df.head())
+    # st.subheader("📂 DTR Master Data (Reference)")
+    # st.dataframe(hierarchy_df.head())
 
     # --- Dropdowns (dependent filtering) ---
     region = st.selectbox("क्षेत्र (Region) चुनें", hierarchy_df["Region"].unique())
