@@ -92,6 +92,10 @@ if final_msn:
     dtr_off_time = simple_time_picker("डीटीआर बंद करने का समय", "off_time")
     dtr_on_time = simple_time_picker("डीटीआर चालू करने का समय", "on_time")
     date = st.date_input("📅 दिनांक चुनें", datetime.today())
+    st.markdown("<hr>", unsafe_allow_html=True)
+    st.subheader("👤 अधिकारी की जानकारी")
+    ae_je_name = st.text_input("👨‍💼 AE/JE का नाम")
+    mobile_number = st.text_input("📱 मोबाइल नंबर", max_chars=10, placeholder="10 अंकों का मोबाइल नंबर दर्ज करें")
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("<hr>", unsafe_allow_html=True)
