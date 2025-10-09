@@ -14,31 +14,6 @@ st.set_page_config(
 # ----------------- CUSTOM CSS -----------------
 st.markdown("""
     <style>
-        /* Change dropdown background and text color */
-        div[data-baseweb="select"] > div {
-            background-color: #f0f4ff !important;  /* Light blue background */
-            color: #000000 !important;             /* Black text */
-            border: 1px solid #004aad !important;  /* Blue border */
-            border-radius: 8px;
-        }
-
-        /* Change hover color */
-        div[data-baseweb="select"]:hover > div {
-            background-color: #e3ecff !important;  /* Slightly darker on hover */
-        }
-
-        /* Dropdown menu list color */
-        ul[role="listbox"] {
-            background-color: #ffffff !important;  /* White dropdown list */
-            color: #000000 !important;
-            border-radius: 6px;
-        }
-
-        /* Change font and highlight color */
-        .stSelectbox label {
-            color: #004aad !important;
-            font-weight: 600;
-        }
                 /* Dropdown option list styling */
         ul[role="listbox"] > li {
             background-color: #f9fbff !important;  /* Default light background */
