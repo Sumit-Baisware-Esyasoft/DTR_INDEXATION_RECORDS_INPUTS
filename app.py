@@ -12,36 +12,37 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 # ----------------- CUSTOM CSS -----------------
+# ----------------- CUSTOM CSS -----------------
 st.markdown("""
     <style>
-                /* Dropdown option list styling */
-        ul[role="listbox"] > li {
-            background-color: #f9fbff !important;  /* Default light background */
+        /* Change dropdown background and text color */
+        div[data-baseweb="select"] > div {
+            background-color: #f0f4ff !important;  /* Light blue background */
+            color: #000000 !important;             /* Black text */
+            border: 1px solid #004aad !important;  /* Blue border */
+            border-radius: 8px;
+        }
+
+        /* Change hover color */
+        div[data-baseweb="select"]:hover > div {
+            background-color: #e3ecff !important;  /* Slightly darker on hover */
+        }
+
+        /* Dropdown menu list color */
+        ul[role="listbox"] {
+            background-color: #ffffff !important;  /* White dropdown list */
             color: #000000 !important;
-            padding: 8px 12px !important;
-            border-radius: 4px;
+            border-radius: 6px;
         }
 
-        /* Alternate color for even items for better visibility */
-        ul[role="listbox"] > li:nth-child(even) {
-            background-color: #eaf1ff !important;  /* Slightly darker blue tone */
-        }
-
-        /* Hover effect on dropdown options */
-        ul[role="listbox"] > li:hover {
-            background-color: #004aad !important;  /* Esyasoft Blue */
-            color: #ffffff !important;             /* White text on hover */
+        /* Change font and highlight color */
+        .stSelectbox label {
+            color: #004aad !important;
             font-weight: 600;
-            transition: 0.2s ease-in-out;
-        }
-
-        /* Selected option highlight */
-        ul[role="listbox"] > li[aria-selected="true"] {
-            background-color: #0073e6 !important;
-            color: #ffffff !important;
         }
     </style>
 """, unsafe_allow_html=True)
+
 
 
 # ----------------- HEADER -----------------
