@@ -58,20 +58,24 @@ if msn_auto:
         if new_msn:
             final_msn = new_msn
 
-# --------- Analog Clock Time Picker ----------
+
+# --------- Analog Clock Picker ----------
 def analog_clock_picker(label):
-    """Custom analog clock picker using JS component"""
+    """Fully functional analog clock popup"""
     st.markdown(f"### {label}")
+    time_key = label.replace(" ", "_").lower()
+    time_placeholder = st.empty()
+
     components.html(f"""
     <html>
     <head>
       <link href="https://cdn.jsdelivr.net/npm/mdtimepicker@0.6.3/mdtimepicker.min.css" rel="stylesheet">
     </head>
-    <body style="font-family: sans-serif; text-align: center; padding-top: 10px;">
-      <input id="{label}_picker" type="text" placeholder="Select time" style="font-size:20px; padding:8px; width:200px; text-align:center; border-radius:8px;">
+    <body style="font-family: sans-serif; text-align: center; padding-top: 5px;">
+      <input id="{time_key}" type="text" placeholder="Select Time" style="font-size:20px; padding:8px; width:200px; text-align:center; border-radius:8px;">
       <script src="https://cdn.jsdelivr.net/npm/mdtimepicker@0.6.3/mdtimepicker.min.js"></script>
       <script>
-        const tp = mdtimepicker('#{label}_picker', {{
+        const tp = mdtimepicker('#{time_key}', {{
             format: 'hh:mm tt',
             theme: 'purple',
             hourPadding: true
@@ -81,7 +85,8 @@ def analog_clock_picker(label):
     </html>
     """, height=220)
 
-    return st.text_input(f"{label} (मैन्युअल पुष्टि करें)", "")
+    # Let user confirm selected value manually
+    return st.text_input(f"{label} की पुष्टि करें (hh:mm AM/PM)", "")
 
 # --------- Date & Time inputs ----------
 if final_msn:
