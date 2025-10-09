@@ -50,7 +50,6 @@ new_msn = None
 if msn_auto:
     st.write(f"🔍 चुना गया MSN: **{msn_auto}**")
     confirm = st.radio("क्या यह MSN सही है?", ["हाँ, सही है ✅", "नहीं, बदलना है ❌"], horizontal=True)
-
     if confirm == "हाँ, सही है ✅":
         final_msn = msn_auto
     else:
@@ -59,58 +58,98 @@ if msn_auto:
             final_msn = new_msn
 
 
-# --------- Analog Clock Picker ----------
-def analog_clock_picker(label):
-    """Fully functional analog clock popup"""
+# --------- Custom Scroll Time Picker ---------
+def scroll_time_picker(label, key_prefix):
     st.markdown(f"### {label}")
-    time_key = label.replace(" ", "_").lower()
-    time_placeholder = st.empty()
-
     components.html(f"""
     <html>
     <head>
-      <link href="https://cdn.jsdelivr.net/npm/mdtimepicker@0.6.3/mdtimepicker.min.css" rel="stylesheet">
+    <style>
+      body {{ font-family: sans-serif; text-align: center; }}
+      .picker-container {{
+        display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 10px;
+      }}
+      select {{
+        font-size: 24px; padding: 8px; border-radius: 8px;
+        border: 2px solid #6f42c1; background: white; text-align: center; width: 100px;
+      }}
+    </style>
     </head>
-    <body style="font-family: sans-serif; text-align: center; padding-top: 5px;">
-      <input id="{time_key}" type="text" placeholder="Select Time" style="font-size:20px; padding:8px; width:200px; text-align:center; border-radius:8px;">
-      <script src="https://cdn.jsdelivr.net/npm/mdtimepicker@0.6.3/mdtimepicker.min.js"></script>
+    <body>
+      <div class="picker-container">
+        <select id="{key_prefix}_hour">
+          <option value="" disabled selected>HH</option>
+          <script>
+            for(let i=1;i<=12;i++){{
+              let val = i.toString().padStart(2,'0');
+              document.write(`<option value="${{val}}">${{val}}</option>`);
+            }}
+          </script>
+        </select>
+        <span style="font-size:24px;">:</span>
+        <select id="{key_prefix}_minute">
+          <option value="" disabled selected>MM</option>
+          <script>
+            for(let i=0;i<60;i++){{
+              let val = i.toString().padStart(2,'0');
+              document.write(`<option value="${{val}}">${{val}}</option>`);
+            }}
+          </script>
+        </select>
+        <select id="{key_prefix}_ampm">
+          <option value="AM">AM</option>
+          <option value="PM">PM</option>
+        </select>
+      </div>
+      <button id="{key_prefix}_ok" style="margin-top: 15px; padding: 8px 20px; font-size: 18px;
+        background-color: #6f42c1; color: white; border: none; border-radius: 8px; cursor: pointer;">
+        OK
+      </button>
+
       <script>
-        const tp = mdtimepicker('#{time_key}', {{
-            format: 'hh:mm tt',
-            theme: 'purple',
-            hourPadding: true
+        const btn = document.getElementById("{key_prefix}_ok");
+        btn.addEventListener("click", () => {{
+          const h = document.getElementById("{key_prefix}_hour").value;
+          const m = document.getElementById("{key_prefix}_minute").value;
+          const a = document.getElementById("{key_prefix}_ampm").value;
+          if(!h || !m){{ alert("Please select hour and minute."); return; }}
+          const time = `${{h}}:${{m}} ${{a}}`;
+          const event = {{ type: "streamlit:setComponentValue", value: time }};
+          window.parent.postMessage(event, "*");
         }});
       </script>
     </body>
     </html>
-    """, height=220)
+    """, height=300, key=key_prefix)
 
-    # Let user confirm selected value manually
-    return st.text_input(f"{label} की पुष्टि करें (hh:mm AM/PM)", "")
 
-# --------- Date & Time inputs ----------
+# --------- Time + Date input only when MSN confirmed ---------
 if final_msn:
-    dtr_off_time = analog_clock_picker("डीटीआर बंद करने का समय")
-    dtr_on_time = analog_clock_picker("डीटीआर चालू करने का समय")
+    st.markdown("---")
+    st.subheader("🕒 समय और दिनांक दर्ज करें")
+
+    st.markdown("#### डीटीआर बंद करने का समय")
+    scroll_time_picker("डीटीआर बंद करने का समय", key_prefix="off")
+
+    st.markdown("#### डीटीआर चालू करने का समय")
+    scroll_time_picker("डीटीआर चालू करने का समय", key_prefix="on")
+
     date = st.date_input("दिनांक चुनें", datetime.today())
 
-    # --------- Submit ----------
+    # Submit button
     if st.button("Submit"):
-        if not dtr_off_time or not dtr_on_time:
-            st.warning("⏰ कृपया दोनों समय भरें!")
-        else:
-            new_data = [
-                region, circle, division, zone, substation,
-                feeder, dtr, dtr_code, feeder_code,
-                msn_auto, new_msn if new_msn else "",
-                final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y")
-            ]
-            sheet.append_row(new_data)
+        dtr_off_time = st.session_state.get("off_time", "")
+        dtr_on_time = st.session_state.get("on_time", "")
+        new_data = [
+            region, circle, division, zone, substation, feeder,
+            dtr, dtr_code, feeder_code, msn_auto, new_msn if new_msn else "",
+            final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y")
+        ]
+        sheet.append_row(new_data)
 
-            st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
-            st.table(pd.DataFrame([new_data], columns=[
-                "क्षेत्र", "सर्कल", "डिवीजन", "ज़ोन", "उपकेंद्र",
-                "फीडर", "डीटीआर", "डीटीआर कोड", "फीडर कोड",
-                "Auto MSN", "New MSN", "Final MSN",
-                "डीटीआर बंद करने का समय", "डीटीआर चालू करने का समय", "दिनांक"
-            ]))
+        st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
+        st.table(pd.DataFrame([new_data], columns=[
+            "क्षेत्र", "सर्कल", "डिवीजन", "ज़ोन", "उपकेंद्र", "फीडर", "डीटीआर", "डीटीआर कोड",
+            "फीडर कोड", "Auto MSN", "New MSN", "Final MSN", "डीटीआर बंद करने का समय",
+            "डीटीआर चालू करने का समय", "दिनांक"
+        ]))
