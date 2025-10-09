@@ -10,7 +10,7 @@ st.set_page_config(page_title="DTR से Consumer Indexation की प्र�
 # Title
 st.title("📑 DTR से Consumer Indexation की प्रक्रिया")
 
-# Load Google credentials
+# Load Google credentials (ensure you set st.secrets["gcp_service_account"])
 creds_dict = st.secrets["gcp_service_account"]
 scope = [
     "https://spreadsheets.google.com/feeds",
@@ -57,99 +57,140 @@ if msn_auto:
         if new_msn:
             final_msn = new_msn
 
-
-# --------- Custom Scroll Time Picker ---------
-def scroll_time_picker(label, key_prefix):
+# --------- Scroll (wheel) Time Picker Component ----------
+def scroll_time_picker(label: str, key_prefix: str, height: int = 280) -> str:
+    """
+    Renders a scrollable hour/minute/AMPM picker using a small JS component inside components.html.
+    When the user clicks OK the JS posts the selected time back to Streamlit.
+    The returned value is saved in st.session_state["{key_prefix}_time"] and also returned by this function.
+    """
     st.markdown(f"### {label}")
-    components.html(f"""
+    # Unique IDs are created by replacing {KEY} with key_prefix below
+    html_template = r"""
+    <!doctype html>
     <html>
     <head>
-    <style>
-      body {{ font-family: sans-serif; text-align: center; }}
-      .picker-container {{
-        display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 10px;
-      }}
-      select {{
-        font-size: 24px; padding: 8px; border-radius: 8px;
-        border: 2px solid #6f42c1; background: white; text-align: center; width: 100px;
-      }}
-    </style>
+      <meta charset="utf-8" />
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 0; padding: 8px; }
+        .picker-container { display:flex; justify-content:center; align-items:center; gap:12px; margin-top:10px; }
+        select { font-size:20px; padding:6px; border-radius:8px; border:1px solid #ccc; width:90px; text-align:center; }
+        #{KEY}_ok { margin-top:12px; padding:8px 18px; font-size:16px; border-radius:8px; background:#4B2C83; color:white; border:none; cursor:pointer; }
+      </style>
     </head>
     <body>
       <div class="picker-container">
-        <select id="{key_prefix}_hour">
+        <select id="{KEY}_hour" aria-label="hour">
           <option value="" disabled selected>HH</option>
-          <script>
-            for(let i=1;i<=12;i++){{
-              let val = i.toString().padStart(2,'0');
-              document.write(`<option value="${{val}}">${{val}}</option>`);
-            }}
-          </script>
         </select>
-        <span style="font-size:24px;">:</span>
-        <select id="{key_prefix}_minute">
+        <span style="font-size:20px;">:</span>
+        <select id="{KEY}_minute" aria-label="minute">
           <option value="" disabled selected>MM</option>
-          <script>
-            for(let i=0;i<60;i++){{
-              let val = i.toString().padStart(2,'0');
-              document.write(`<option value="${{val}}">${{val}}</option>`);
-            }}
-          </script>
         </select>
-        <select id="{key_prefix}_ampm">
+        <select id="{KEY}_ampm" aria-label="ampm">
           <option value="AM">AM</option>
           <option value="PM">PM</option>
         </select>
       </div>
-      <button id="{key_prefix}_ok" style="margin-top: 15px; padding: 8px 20px; font-size: 18px;
-        background-color: #6f42c1; color: white; border: none; border-radius: 8px; cursor: pointer;">
-        OK
-      </button>
+
+      <div style="text-align:center;">
+        <button id="{KEY}_ok">OK</button>
+      </div>
 
       <script>
-        const btn = document.getElementById("{key_prefix}_ok");
-        btn.addEventListener("click", () => {{
-          const h = document.getElementById("{key_prefix}_hour").value;
-          const m = document.getElementById("{key_prefix}_minute").value;
-          const a = document.getElementById("{key_prefix}_ampm").value;
-          if(!h || !m){{ alert("Please select hour and minute."); return; }}
-          const time = `${{h}}:${{m}} ${{a}}`;
-          const event = {{ type: "streamlit:setComponentValue", value: time }};
-          window.parent.postMessage(event, "*");
-        }});
+        (function() {{
+          // populate hours 01-12
+          var hourSelect = document.getElementById("{KEY}_hour");
+          for(var i=1;i<=12;i++) {{
+            var v = (i < 10 ? '0' + i : '' + i);
+            var o = document.createElement('option');
+            o.value = v; o.text = v;
+            hourSelect.appendChild(o);
+          }}
+
+          // populate minutes 00-59
+          var minSelect = document.getElementById("{KEY}_minute");
+          for(var j=0;j<60;j++) {{
+            var mv = (j < 10 ? '0' + j : '' + j);
+            var mo = document.createElement('option');
+            mo.value = mv; mo.text = mv;
+            minSelect.appendChild(mo);
+          }}
+
+          // optionally set defaults (first valid option)
+          // hourSelect.value = '12';
+          // minSelect.value = '00';
+
+          document.getElementById("{KEY}_ok").addEventListener('click', function() {{
+            var h = document.getElementById("{KEY}_hour").value;
+            var m = document.getElementById("{KEY}_minute").value;
+            var a = document.getElementById("{KEY}_ampm").value;
+            if(!h || !m) {{
+              alert("कृपया Hour और Minute चुनें। / Please select hour and minute.");
+              return;
+            }}
+            var time = h + ':' + m + ' ' + a;
+            // Send value back to Streamlit. Streamlit captures this and returns it from components.html
+            window.parent.postMessage({{ type: 'streamlit:setComponentValue', value: time }}, '*');
+          }});
+        }})();
       </script>
     </body>
     </html>
-    """, height=300, key=key_prefix)
+    """
 
+    html = html_template.replace("{KEY}", key_prefix)
 
-# --------- Time + Date input only when MSN confirmed ---------
+    # Render component and capture return value (if JS posted it)
+    returned = components.html(html, height=height, scrolling=False, key=f"comp_{key_prefix}")
+
+    # If JS posted a value, components.html returns it on next run – save to session_state
+    if returned:
+        st.session_state[f"{key_prefix}_time"] = returned
+
+    # Return saved value or empty string
+    return st.session_state.get(f"{key_prefix}_time", "")
+
+# --------- Date & Time inputs (only when MSN confirmed) ----------
 if final_msn:
     st.markdown("---")
-    st.subheader("🕒 समय और दिनांक दर्ज करें")
+    st.subheader("🕒 डीटीआर का समय और दिनांक चुनें")
 
-    st.markdown("#### डीटीआर बंद करने का समय")
-    scroll_time_picker("डीटीआर बंद करने का समय", key_prefix="off")
+    # Render scroll pickers; they will store into session_state keys "off_time" and "on_time"
+    off_time = scroll_time_picker("डीटीआर बंद करने का समय", key_prefix="off_time")
+    on_time = scroll_time_picker("डीटीआर चालू करने का समय", key_prefix="on_time")
 
-    st.markdown("#### डीटीआर चालू करने का समय")
-    scroll_time_picker("डीटीआर चालू करने का समय", key_prefix="on")
+    # Show chosen times
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("**चुना गया बंद समय:**", off_time if off_time else "—")
+    with col2:
+        st.write("**चुना गया चालू समय:**", on_time if on_time else "—")
 
     date = st.date_input("दिनांक चुनें", datetime.today())
 
-    # Submit button
+    # --------- Submit ----------
     if st.button("Submit"):
-        dtr_off_time = st.session_state.get("off_time", "")
-        dtr_on_time = st.session_state.get("on_time", "")
-        new_data = [
-            region, circle, division, zone, substation, feeder,
-            dtr, dtr_code, feeder_code, msn_auto, new_msn if new_msn else "",
-            final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y")
-        ]
-        sheet.append_row(new_data)
+        # Basic validation
+        if not off_time or not on_time:
+            st.warning("कृपया दोनों समय चुनकर OK दबाएँ।")
+        else:
+            new_data = [
+                region, circle, division, zone, substation,
+                feeder, dtr, dtr_code, feeder_code,
+                msn_auto, new_msn if new_msn else "",
+                final_msn, off_time, on_time, date.strftime("%d-%m-%Y")
+            ]
 
-        st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
-        st.table(pd.DataFrame([new_data], columns=[
-            "क्षेत्र", "सर्कल", "डिवीजन", "ज़ोन", "उपकेंद्र", "फीडर", "डीटीआर", "डीटीआर कोड",
-            "फीडर कोड", "Auto MSN", "New MSN", "Final MSN", "डीटीआर बंद करने का समय",
-            "डीटीआर चालू करने का समय", "दिनांक"
-        ]))
+            # Save in Google Sheet
+            try:
+                sheet.append_row(new_data)
+                st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
+                st.table(pd.DataFrame([new_data], columns=[
+                    "क्षेत्र", "सर्कल", "डिवीजन", "ज़ोन", "उपकेंद्र",
+                    "फीडर", "डीटीआर", "डीटीआर कोड", "फीडर कोड",
+                    "Auto MSN", "New MSN", "Final MSN",
+                    "डीटीआर बंद करने का समय", "डीटीआर चालू करने का समय", "दिनांक"
+                ]))
+            except Exception as e:
+                st.error(f"⚠️ Google Sheet में सेव करने में त्रुटि: {e}")
