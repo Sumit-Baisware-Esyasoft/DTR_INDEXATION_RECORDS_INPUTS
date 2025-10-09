@@ -60,12 +60,10 @@ if msn_auto:
 # --------- Scroll (wheel) Time Picker Component ----------
 def scroll_time_picker(label: str, key_prefix: str, height: int = 280) -> str:
     """
-    Renders a scrollable hour/minute/AMPM picker using a small JS component inside components.html.
-    When the user clicks OK the JS posts the selected time back to Streamlit.
-    The returned value is saved in st.session_state["{key_prefix}_time"] and also returned by this function.
+    Scrollable hour/minute/AMPM picker using JS component.
+    Stores selected time in st.session_state[key_prefix].
     """
     st.markdown(f"### {label}")
-    # Unique IDs are created by replacing {KEY} with key_prefix below
     html_template = r"""
     <!doctype html>
     <html>
@@ -80,76 +78,44 @@ def scroll_time_picker(label: str, key_prefix: str, height: int = 280) -> str:
     </head>
     <body>
       <div class="picker-container">
-        <select id="{KEY}_hour" aria-label="hour">
-          <option value="" disabled selected>HH</option>
-        </select>
+        <select id="{KEY}_hour" aria-label="hour"><option value="" disabled selected>HH</option></select>
         <span style="font-size:20px;">:</span>
-        <select id="{KEY}_minute" aria-label="minute">
-          <option value="" disabled selected>MM</option>
-        </select>
-        <select id="{KEY}_ampm" aria-label="ampm">
-          <option value="AM">AM</option>
-          <option value="PM">PM</option>
-        </select>
+        <select id="{KEY}_minute" aria-label="minute"><option value="" disabled selected>MM</option></select>
+        <select id="{KEY}_ampm" aria-label="ampm"><option value="AM">AM</option><option value="PM">PM</option></select>
       </div>
-
       <div style="text-align:center;">
         <button id="{KEY}_ok">OK</button>
       </div>
-
       <script>
         (function() {{
-          // populate hours 01-12
           var hourSelect = document.getElementById("{KEY}_hour");
-          for(var i=1;i<=12;i++) {{
-            var v = (i < 10 ? '0' + i : '' + i);
-            var o = document.createElement('option');
-            o.value = v; o.text = v;
-            hourSelect.appendChild(o);
+          for(var i=1;i<=12;i++){{
+            var v = (i<10?'0'+i:''+i);
+            var o = document.createElement('option'); o.value=v;o.text=v;hourSelect.appendChild(o);
           }}
-
-          // populate minutes 00-59
           var minSelect = document.getElementById("{KEY}_minute");
-          for(var j=0;j<60;j++) {{
-            var mv = (j < 10 ? '0' + j : '' + j);
-            var mo = document.createElement('option');
-            mo.value = mv; mo.text = mv;
-            minSelect.appendChild(mo);
+          for(var j=0;j<60;j++){{
+            var mv = (j<10?'0'+j:''+j);
+            var mo = document.createElement('option'); mo.value=mv;mo.text=mv;minSelect.appendChild(mo);
           }}
-
-          // optionally set defaults (first valid option)
-          // hourSelect.value = '12';
-          // minSelect.value = '00';
-
-          document.getElementById("{KEY}_ok").addEventListener('click', function() {{
-            var h = document.getElementById("{KEY}_hour").value;
-            var m = document.getElementById("{KEY}_minute").value;
-            var a = document.getElementById("{KEY}_ampm").value;
-            if(!h || !m) {{
-              alert("कृपया Hour और Minute चुनें। / Please select hour and minute.");
-              return;
-            }}
-            var time = h + ':' + m + ' ' + a;
-            // Send value back to Streamlit. Streamlit captures this and returns it from components.html
-            window.parent.postMessage({{ type: 'streamlit:setComponentValue', value: time }}, '*');
+          document.getElementById("{KEY}_ok").addEventListener('click', function(){{
+            var h=document.getElementById("{KEY}_hour").value;
+            var m=document.getElementById("{KEY}_minute").value;
+            var a=document.getElementById("{KEY}_ampm").value;
+            if(!h || !m){{ alert("कृपया Hour और Minute चुनें।"); return; }}
+            var time=h+":"+m+" "+a;
+            window.parent.postMessage({{type:'streamlit:customTime', key:'{KEY}', value:time}}, '*');
           }});
         }})();
       </script>
     </body>
     </html>
     """
-
     html = html_template.replace("{KEY}", key_prefix)
+    components.html(html, height=height, scrolling=False, key=f"comp_{key_prefix}")
 
-    # Render component and capture return value (if JS posted it)
-    returned = components.html(html, height=height, scrolling=False, key=f"comp_{key_prefix}")
-
-    # If JS posted a value, components.html returns it on next run – save to session_state
-    if returned:
-        st.session_state[f"{key_prefix}_time"] = returned
-
-    # Return saved value or empty string
-    return st.session_state.get(f"{key_prefix}_time", "")
+    # Return value from session_state (set by JS)
+    return st.session_state.get(key_prefix, "")
 
 # --------- Date & Time inputs (only when MSN confirmed) ----------
 if final_msn:
