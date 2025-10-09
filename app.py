@@ -202,41 +202,16 @@ if final_msn:
 
     st.markdown("<hr>", unsafe_allow_html=True)
 
-    # ----------------- SUBMIT -----------------
-    if st.button("💾 सबमिट करें", use_container_width=True, type="primary"):
-        # Validation
-        empty_fields = []
-
-        # Check for empty or missing values
-        if not region: empty_fields.append("क्षेत्र (Region)")
-        if not circle: empty_fields.append("सर्कल (Circle)")
-        if not division: empty_fields.append("डिवीजन (Division)")
-        if not zone: empty_fields.append("वितरण केंद्र (Zone)")
-        if not substation: empty_fields.append("उपकेंद्र (Substation)")
-        if not feeder: empty_fields.append("फीडर (Feeder)")
-        if not dtr: empty_fields.append("डीटीआर (DTR)")
-        if not dtr_code: empty_fields.append("डीटीआर कोड")
-        if not feeder_code: empty_fields.append("फीडर कोड")
-        if not final_msn: empty_fields.append("मीटर सीरियल नंबर (MSN)")
-        if not dtr_off_time: empty_fields.append("डीटीआर बंद करने का समय")
-        if not dtr_on_time: empty_fields.append("डीटीआर चालू करने का समय")
-        if not date: empty_fields.append("दिनांक")
-        if not ae_je_name: empty_fields.append("AE/JE का नाम")
-        if not mobile_number: empty_fields.append("मोबाइल नंबर")
-
-        # Show warning if anything is empty
-        if empty_fields:
-            st.warning("⚠️ कृपया सभी आवश्यक फ़ील्ड भरें:\n- " + "\n- ".join(empty_fields))
-        else:
-            new_data = [
-                region, circle, division, zone, substation,
-                feeder, dtr, dtr_code, feeder_code,
-                msn_auto, new_msn if new_msn else "",
-                final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y"),
-                ae_je_name, mobile_number
-            ]
-            sheet.append_row(new_data)
-            st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
+     # ----------------- SUBMIT -----------------
+if st.button("💾 सबमिट करें", use_container_width=True, type="primary"):
+        new_data = [
+            region, circle, division, zone, substation,
+            feeder, dtr, dtr_code, feeder_code,
+            msn_auto, new_msn if new_msn else "",
+            final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y")
+        ]
+        sheet.append_row(new_data)
+        st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
 
 # ----------------- FOOTER -----------------
 st.markdown("<hr>", unsafe_allow_html=True)
@@ -246,8 +221,5 @@ st.markdown("""
         <span style='color:#004aad;'>DTR Indexation Portal</span>
     </div>
 """, unsafe_allow_html=True)
-
-st.image("logo.png", width=120, caption="Esyasoft Technologies", use_container_width=False)
-
 
 st.image("download (1).png", width=150, caption="Esyasoft Technologies", use_container_width=False)
