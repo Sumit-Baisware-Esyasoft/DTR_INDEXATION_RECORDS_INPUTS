@@ -202,8 +202,8 @@ if final_msn:
 
     st.markdown("<hr>", unsafe_allow_html=True)
 
-     # ----------------- SUBMIT -----------------
-if st.button("💾 सबमिट करें", use_container_width=True, type="primary"):
+   # ----------------- SUBMIT -----------------
+    if st.button("💾 सबमिट करें", use_container_width=True, type="primary"):
         new_data = [
             region, circle, division, zone, substation,
             feeder, dtr, dtr_code, feeder_code,
@@ -221,5 +221,6 @@ st.markdown("""
         <span style='color:#004aad;'>DTR Indexation Portal</span>
     </div>
 """, unsafe_allow_html=True)
+
 
 st.image("download (1).png", width=150, caption="Esyasoft Technologies", use_container_width=False)
