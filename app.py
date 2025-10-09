@@ -116,4 +116,4 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-st.image(""\download (1).png"", width=120, caption="Esyasoft Technologies", use_container_width=False)
+st.image("download (1).png", width=120, caption="Esyasoft Technologies", use_container_width=False)
