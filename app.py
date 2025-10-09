@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, time
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -57,25 +57,22 @@ if msn_auto:
         if new_msn:
             final_msn = new_msn
 
-# --- Custom time picker ---
-def custom_time_picker(label):
-    st.write(f"### {label}")
-    col1, col2, col3 = st.columns([2, 2, 2])
-
-    with col1:
-        hour = st.slider(f"{label} - घंटा", 1, 12, 12, key=label + "hour")
-    with col2:
-        minute = st.slider(f"{label} - मिनट", 0, 59, 0, key=label + "minute")
-    with col3:
-        am_pm = st.radio(f"{label} - AM/PM", ["AM", "PM"], horizontal=True, key=label + "ampm")
-
-    time_str = f"{hour:02d}:{minute:02d} {am_pm}"
-    return time_str
+# --------- Time Picker (with real clock) ----------
+def custom_time_picker(label, default_time):
+    """Use Streamlit's built-in clock-style time input."""
+    selected_time = st.time_input(label, value=default_time, key=label)
+    formatted_time = selected_time.strftime("%I:%M %p")  # 12-hour format with AM/PM
+    return formatted_time
 
 # Date & Time inputs (only when MSN confirmed)
 if final_msn:
-    dtr_off_time = custom_time_picker("डीटीआर बंद करने का समय")
-    dtr_on_time = custom_time_picker("डीटीआर चालू करने का समय")
+    # Default times: Off time = current time, On time = +1 hour
+    now = datetime.now()
+    default_off = time(now.hour, now.minute)
+    default_on = time((now.hour + 1) % 24, now.minute)
+
+    dtr_off_time = custom_time_picker("डीटीआर बंद करने का समय", default_off)
+    dtr_on_time = custom_time_picker("डीटीआर चालू करने का समय", default_on)
     date = st.date_input("दिनांक चुनें", datetime.today())
 
     # --------- Submit ----------
@@ -98,14 +95,11 @@ if final_msn:
             "डीटीआर बंद करने का समय", "डीटीआर चालू करने का समय", "दिनांक"
         ]))
 
-# --------- Display Records ----------
-# --------- Display Records ----------
+# --------- (Optional) Display Records ----------
 # st.subheader("📋 सभी रिकॉर्ड्स")
-
 # try:
 #     all_values = sheet.get_all_values()
-#     if not all_values:  
-#         # अगर Sheet खाली है → पहले header डालें
+#     if not all_values:
 #         headers = [
 #             "क्षेत्र", "सर्कल", "डिवीजन", "ज़ोन", "उपकेंद्र",
 #             "फीडर", "डीटीआर", "डीटीआर कोड", "फीडर कोड",
@@ -115,7 +109,6 @@ if final_msn:
 #         sheet.append_row(headers)
 #         st.info("📝 हेडर Google Sheet में बना दिए गए। अभी तक कोई रिकॉर्ड नहीं है।")
 #     else:
-#         # अगर data है → records show करें
 #         records = sheet.get_all_records()
 #         if records:
 #             df = pd.DataFrame(records)
