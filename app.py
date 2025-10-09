@@ -1,8 +1,9 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime, time
+from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import streamlit.components.v1 as components
 
 st.set_page_config(page_title="DTR से Consumer Indexation की प्रक्रिया", layout="centered")
 
@@ -57,63 +58,54 @@ if msn_auto:
         if new_msn:
             final_msn = new_msn
 
-# --------- Time Picker (with real clock) ----------
-def custom_time_picker(label, default_time):
-    """Use Streamlit's built-in clock-style time input."""
-    selected_time = st.time_input(label, value=default_time, key=label)
-    formatted_time = selected_time.strftime("%I:%M %p")  # 12-hour format with AM/PM
-    return formatted_time
+# --------- Analog Clock Time Picker ----------
+def analog_clock_picker(label):
+    """Custom analog clock picker using JS component"""
+    st.markdown(f"### {label}")
+    components.html(f"""
+    <html>
+    <head>
+      <link href="https://cdn.jsdelivr.net/npm/mdtimepicker@0.6.3/mdtimepicker.min.css" rel="stylesheet">
+    </head>
+    <body style="font-family: sans-serif; text-align: center; padding-top: 10px;">
+      <input id="{label}_picker" type="text" placeholder="Select time" style="font-size:20px; padding:8px; width:200px; text-align:center; border-radius:8px;">
+      <script src="https://cdn.jsdelivr.net/npm/mdtimepicker@0.6.3/mdtimepicker.min.js"></script>
+      <script>
+        const tp = mdtimepicker('#{label}_picker', {{
+            format: 'hh:mm tt',
+            theme: 'purple',
+            hourPadding: true
+        }});
+      </script>
+    </body>
+    </html>
+    """, height=220)
 
-# Date & Time inputs (only when MSN confirmed)
+    return st.text_input(f"{label} (मैन्युअल पुष्टि करें)", "")
+
+# --------- Date & Time inputs ----------
 if final_msn:
-    # Default times: Off time = current time, On time = +1 hour
-    now = datetime.now()
-    default_off = time(now.hour, now.minute)
-    default_on = time((now.hour + 1) % 24, now.minute)
-
-    dtr_off_time = custom_time_picker("डीटीआर बंद करने का समय", default_off)
-    dtr_on_time = custom_time_picker("डीटीआर चालू करने का समय", default_on)
+    dtr_off_time = analog_clock_picker("डीटीआर बंद करने का समय")
+    dtr_on_time = analog_clock_picker("डीटीआर चालू करने का समय")
     date = st.date_input("दिनांक चुनें", datetime.today())
 
     # --------- Submit ----------
     if st.button("Submit"):
-        new_data = [
-            region, circle, division, zone, substation,
-            feeder, dtr, dtr_code, feeder_code,
-            msn_auto, new_msn if new_msn else "",  # नया MSN column
-            final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y")
-        ]
+        if not dtr_off_time or not dtr_on_time:
+            st.warning("⏰ कृपया दोनों समय भरें!")
+        else:
+            new_data = [
+                region, circle, division, zone, substation,
+                feeder, dtr, dtr_code, feeder_code,
+                msn_auto, new_msn if new_msn else "",
+                final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y")
+            ]
+            sheet.append_row(new_data)
 
-        # Save in Google Sheet
-        sheet.append_row(new_data)
-
-        st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
-        st.table(pd.DataFrame([new_data], columns=[
-            "क्षेत्र", "सर्कल", "डिवीजन", "ज़ोन", "उपकेंद्र",
-            "फीडर", "डीटीआर", "डीटीआर कोड", "फीडर कोड",
-            "Auto MSN", "New MSN", "Final MSN",
-            "डीटीआर बंद करने का समय", "डीटीआर चालू करने का समय", "दिनांक"
-        ]))
-
-# --------- (Optional) Display Records ----------
-# st.subheader("📋 सभी रिकॉर्ड्स")
-# try:
-#     all_values = sheet.get_all_values()
-#     if not all_values:
-#         headers = [
-#             "क्षेत्र", "सर्कल", "डिवीजन", "ज़ोन", "उपकेंद्र",
-#             "फीडर", "डीटीआर", "डीटीआर कोड", "फीडर कोड",
-#             "Auto MSN", "New MSN", "Final MSN",
-#             "डीटीआर बंद करने का समय", "डीटीआर चालू करने का समय", "दिनांक"
-#         ]
-#         sheet.append_row(headers)
-#         st.info("📝 हेडर Google Sheet में बना दिए गए। अभी तक कोई रिकॉर्ड नहीं है।")
-#     else:
-#         records = sheet.get_all_records()
-#         if records:
-#             df = pd.DataFrame(records)
-#             st.dataframe(df)
-#         else:
-#             st.info("अभी तक कोई रिकॉर्ड सेव नहीं हुआ है।")
-# except Exception as e:
-#     st.error(f"⚠️ रिकॉर्ड लोड करने में समस्या: {e}")
+            st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
+            st.table(pd.DataFrame([new_data], columns=[
+                "क्षेत्र", "सर्कल", "डिवीजन", "ज़ोन", "उपकेंद्र",
+                "फीडर", "डीटीआर", "डीटीआर कोड", "फीडर कोड",
+                "Auto MSN", "New MSN", "Final MSN",
+                "डीटीआर बंद करने का समय", "डीटीआर चालू करने का समय", "दिनांक"
+            ]))
