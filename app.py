@@ -111,9 +111,9 @@ if final_msn:
 st.markdown("<hr>", unsafe_allow_html=True)
 st.markdown("""
     <div style='text-align: center; color: gray; font-size: 15px;'>
-        <b>Developed by Esyasoft GIS Team</b> | © 2025<br>
+        <b>Developed by Esyasoft Team</b> | © 2025<br>
         <span style='color:#004aad;'>DTR Indexation Portal</span>
     </div>
 """, unsafe_allow_html=True)
 
-st.image("download (1).png", width=120, caption="Esyasoft Technologies", use_container_width=False)
+st.image("download (1).png", width=150, caption="Esyasoft Technologies", use_container_width=False)
