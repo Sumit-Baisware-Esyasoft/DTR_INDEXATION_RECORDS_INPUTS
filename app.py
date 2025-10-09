@@ -103,16 +103,18 @@ if final_msn:
 
 
    # ----------------- SUBMIT -----------------
+    # ----------------- SUBMIT -----------------
     if st.button("💾 सबमिट करें", use_container_width=True, type="primary"):
-       new_data = [
-         region, circle, division, zone, substation,
-         feeder, dtr, dtr_code, feeder_code,
-         msn_auto, new_msn if new_msn else "",
-         final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y"),
-          ae_je_name, mobile_number   # ✅ Added two new columns at the end
-       ]
+        new_data = [
+            region, circle, division, zone, substation,
+            feeder, dtr, dtr_code, feeder_code,
+            msn_auto, new_msn if new_msn else "",
+            final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y"),
+            ae_je_name, mobile_number   # ✅ Added two new columns at the end
+        ]
         sheet.append_row(new_data)
         st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
+
 
 # ----------------- FOOTER -----------------
 st.markdown("<hr>", unsafe_allow_html=True)
