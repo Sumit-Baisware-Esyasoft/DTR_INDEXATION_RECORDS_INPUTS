@@ -11,6 +11,14 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed"
 )
+st.markdown(
+    """
+    <div style='text-align: center; margin-bottom: 20px;'>
+        <img src='mpez-logo.png' width='120'>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 # ----------------- CUSTOM CSS -----------------
 st.markdown("""
     <style>
@@ -50,15 +58,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ----------------- LOGO SECTION -----------------
-st.markdown(
-    """
-    <div class='logo-container'>
-        <img src='https://www.bing.com/images/search?view=detailV2&ccid=eZyl3t6q&id=DD1EE906728970266B93176F58AF9C706AE2A8BC&thid=OIP.eZyl3t6qEyxh1tfNfghJ3wAAAA&mediaurl=https%3a%2f%2fmedia.9curry.com%2fuploads%2forganization%2fimage%2f987%2fmpez-logo.png&exph=320&expw=320&q=mpez+logo&FORM=IRPRST&ck=F845CB955318706BFD28DB2820923F52&selectedIndex=0&itb=0' width='120'>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# # ----------------- LOGO SECTION -----------------
+# st.markdown(
+#     """
+#     <div class='logo-container'>
+#         <img src='https://www.bing.com/images/search?view=detailV2&ccid=eZyl3t6q&id=DD1EE906728970266B93176F58AF9C706AE2A8BC&thid=OIP.eZyl3t6qEyxh1tfNfghJ3wAAAA&mediaurl=https%3a%2f%2fmedia.9curry.com%2fuploads%2forganization%2fimage%2f987%2fmpez-logo.png&exph=320&expw=320&q=mpez+logo&FORM=IRPRST&ck=F845CB955318706BFD28DB2820923F52&selectedIndex=0&itb=0' width='120'>
+#     </div>
+#     """,
+#     unsafe_allow_html=True
+# )
 
 
 # ----------------- HEADER -----------------
