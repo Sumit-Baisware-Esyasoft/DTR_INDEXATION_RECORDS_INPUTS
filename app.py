@@ -11,14 +11,14 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed"
 )
-st.markdown(
-    """
-    <div style='text-align: center; margin-bottom: 20px;'>
-        <img src='mpez-logo.png' width='120'>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# st.markdown(
+#     """
+#     <div style='text-align: center; margin-bottom: 20px;'>
+#         <img src='mpez-logo.png' width='120'>
+#     </div>
+#     """,
+#     unsafe_allow_html=True
+# )
 # ----------------- CUSTOM CSS -----------------
 st.markdown("""
     <style>
