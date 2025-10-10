@@ -191,6 +191,9 @@ if final_msn:
                 <p><b>📅 दिनांक:</b> {date}</p>
             </div>
         """.format(
+            feeder=feeder,
+            feeder_code=feeder_code,
+            dtr=dtr,
             final_msn=final_msn,
             off_time=dtr_off_time,
             on_time=dtr_on_time,
