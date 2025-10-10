@@ -70,9 +70,11 @@ st.markdown("""
 
 
 # ----------------- HEADER -----------------
+# ----------------- HEADER WITH IMAGE -----------------
+st.image("mpez-logo.png", width=300)  # Adjust width as needed
 st.markdown("""
     <h1 style='text-align: center; color: #004aad; font-size: 36px;'>
-        ⚡DTR से Smart Metered Consumer Indexating की प्रक्रियाा
+        ⚡ DTR से Smart Metered Consumer Indexing की प्रक्रिया
     </h1>
     <p style='text-align: center; color: gray; font-size: 18px;'>
         कृपया नीचे दी गई जानकारी ध्यानपूर्वक भरें।
