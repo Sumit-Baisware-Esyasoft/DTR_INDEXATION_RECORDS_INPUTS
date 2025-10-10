@@ -73,18 +73,43 @@ st.markdown("""
 # ----------------- HEADER WITH IMAGE -----------------
 # ----------------- HEADER WITH CENTERED IMAGE -----------------
 # ----------------- HEADER WITH CENTERED IMAGE -----------------
-st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-st.image("mpez-logo.png", width=300)
-st.markdown("</div>", unsafe_allow_html=True)
-
+# ----------------- ATTRACTIVE HEADER WITH LOGO & TEXT COMBINATION -----------------
 st.markdown("""
-    <h1 style='text-align: center; color: #004aad; font-size: 36px;'>
-        ⚡ DTR से Smart Metered Consumer Indexing की प्रक्रिया
-    </h1>
-    <p style='text-align: center; color: gray; font-size: 18px;'>
-        कृपया नीचे दी गई जानकारी ध्यानपूर्वक भरें।
-    </p>
-    <hr style='margin-top: 10px; margin-bottom: 20px;'>
+    <div style='
+        background: linear-gradient(135deg, #004aad 0%, #002966 100%);
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0, 74, 173, 0.3);
+        text-align: center;
+        border-left: 5px solid #ffd700;
+        border-right: 5px solid #ffd700;
+    '>
+        <div style='display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;'>
+            <div style='flex-shrink: 0;'>
+                <img src='mpez-logo.png' width='80' style='border-radius: 10px;'>
+            </div>
+            <div style='flex: 1; min-width: 300px;'>
+                <h1 style='
+                    color: white; 
+                    font-size: 28px; 
+                    margin: 0;
+                    font-weight: bold;
+                    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+                '>
+                    ⚡ DTR से Smart Metered Consumer Indexing की प्रक्रिया
+                </h1>
+                <p style='
+                    color: #e6f2ff; 
+                    font-size: 16px; 
+                    margin: 8px 0 0 0;
+                    font-weight: 500;
+                '>
+                    कृपया नीचे दी गई जानकारी ध्यानपूर्वक भरें
+                </p>
+            </div>
+        </div>
+    </div>
 """, unsafe_allow_html=True)
 
 # ----------------- GOOGLE SHEET CONNECTION -----------------
