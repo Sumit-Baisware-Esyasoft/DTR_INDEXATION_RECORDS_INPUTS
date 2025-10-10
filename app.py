@@ -30,25 +30,6 @@ st.markdown("""
             text-align: center;
             border-left: 6px solid #ffd700;
             border-right: 6px solid #ffd700;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .main-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1%, transparent 1%);
-            background-size: 20px 20px;
-            animation: sparkle 4s linear infinite;
-        }
-        
-        @keyframes sparkle {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
         
         /* Card styling */
@@ -59,52 +40,23 @@ st.markdown("""
             margin: 15px 0;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             border: 2px solid #e0e0e0;
-            transition: all 0.3s ease;
         }
         
-        .custom-card:hover {
-            box-shadow: 0 6px 20px rgba(0, 74, 173, 0.15);
-            border-color: #004aad;
-            transform: translateY(-2px);
-        }
-        
-        /* Success card */
         .success-card {
             background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
             border: 2px solid #28a745;
             box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
         }
         
-        /* Dropdown styling */
-        div[data-baseweb="select"] > div {
+        /* Dropdown styling - FIXED */
+        .stSelectbox > div > div {
             background-color: #f8f9fa !important;
-            color: #000000 !important;
             border: 2px solid #004aad !important;
-            border-radius: 10px;
-            padding: 10px;
-            font-weight: 500;
-        }
-        
-        div[data-baseweb="select"]:hover > div {
-            background-color: #e3ecff !important;
-            border-color: #002966 !important;
-        }
-        
-        ul[role="listbox"] {
-            background-color: #ffffff !important;
-            color: #000000 !important;
-            border-radius: 10px;
-            border: 2px solid #004aad;
-        }
-        
-        .stSelectbox label {
-            color: #004aad !important;
-            font-weight: 700;
-            font-size: 16px;
+            border-radius: 10px !important;
         }
         
         /* Button styling */
-        .stButton button {
+        .stButton > button {
             background: linear-gradient(135deg, #004aad 0%, #002966 100%) !important;
             color: white !important;
             border: none !important;
@@ -112,29 +64,20 @@ st.markdown("""
             border-radius: 10px !important;
             font-weight: 700 !important;
             font-size: 18px !important;
-            transition: all 0.3s ease !important;
-            box-shadow: 0 4px 15px rgba(0, 74, 173, 0.4) !important;
-        }
-        
-        .stButton button:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 6px 20px rgba(0, 74, 173, 0.6) !important;
-            background: linear-gradient(135deg, #002966 0%, #004aad 100%) !important;
+            width: 100% !important;
         }
         
         /* Text input styling */
-        .stTextInput input {
+        .stTextInput > div > div > input {
             border: 2px solid #004aad !important;
             border-radius: 10px !important;
             padding: 12px !important;
-            font-size: 16px !important;
         }
         
         /* Date input styling */
-        .stDateInput input {
+        .stDateInput > div > div > input {
             border: 2px solid #004aad !important;
             border-radius: 10px !important;
-            padding: 12px !important;
         }
         
         /* Radio button styling */
@@ -152,6 +95,13 @@ st.markdown("""
             border-radius: 10px !important;
             font-weight: 700 !important;
             font-size: 18px !important;
+            border: none !important;
+        }
+        
+        .streamlit-expanderContent {
+            background: #f8f9fa !important;
+            border-radius: 0 0 10px 10px !important;
+            padding: 20px !important;
         }
         
         /* Footer styling */
@@ -162,47 +112,16 @@ st.markdown("""
             border-radius: 15px;
             text-align: center;
             margin-top: 30px;
-            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
         }
         
-        /* Icon styling */
-        .icon-large {
-            font-size: 24px;
-            margin-right: 10px;
+        /* Remove default Streamlit styling */
+        .stApp {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         }
         
-        /* Progress indicator */
-        .progress-container {
-            display: flex;
-            justify-content: space-between;
-            margin: 30px 0;
-            position: relative;
-        }
-        
-        .progress-step {
-            text-align: center;
-            z-index: 2;
-            background: white;
+        /* Fix column spacing */
+        .stColumn {
             padding: 10px;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid #004aad;
-            font-weight: bold;
-            color: #004aad;
-        }
-        
-        .progress-line {
-            position: absolute;
-            top: 25px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #e0e0e0;
-            z-index: 1;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -225,114 +144,213 @@ st.markdown("""
             font-size: 18px; 
             margin: 10px 0 0 0;
             font-weight: 500;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         '>
             कृपया नीचे दी गई जानकारी ध्यानपूर्वक भरें | Please fill the below information carefully
         </p>
     </div>
 """, unsafe_allow_html=True)
 
-# ----------------- PROGRESS INDICATOR -----------------
-st.markdown("""
-    <div class='progress-container'>
-        <div class='progress-line'></div>
-        <div class='progress-step'>1</div>
-        <div class='progress-step'>2</div>
-        <div class='progress-step'>3</div>
-        <div class='progress-step'>4</div>
-    </div>
-""", unsafe_allow_html=True)
-
 # ----------------- GOOGLE SHEET CONNECTION -----------------
-creds_dict = st.secrets["gcp_service_account"]
-scope = [
-    "https://spreadsheets.google.com/feeds",
-    "https://www.googleapis.com/auth/drive"
-]
-credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-client = gspread.authorize(credentials)
-sheet = client.open("DTR_Indexation_Records").sheet1
+@st.cache_resource
+def get_google_sheet():
+    creds_dict = st.secrets["gcp_service_account"]
+    scope = [
+        "https://spreadsheets.google.com/feeds",
+        "https://www.googleapis.com/auth/drive"
+    ]
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    client = gspread.authorize(credentials)
+    return client.open("DTR_Indexation_Records").sheet1
+
+try:
+    sheet = get_google_sheet()
+except Exception as e:
+    st.error(f"Google Sheets connection failed: {e}")
+    sheet = None
 
 # ----------------- LOAD HIERARCHY -----------------
+@st.cache_data
+def load_hierarchy_data():
+    try:
+        hierarchy_path = r"DTR Master Information 2025-09-22 07-00_21992_batch1.xlsx"
+        return pd.read_excel(hierarchy_path)
+    except Exception as e:
+        st.error(f"Error loading master file: {e}")
+        return None
+
+hierarchy_df = load_hierarchy_data()
+
+# ----------------- SYSTEM INFORMATION SECTION -----------------
 st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
 st.markdown("### 🗂️ सिस्टम जानकारी | System Information")
 
-try:
-    hierarchy_path = r"DTR Master Information 2025-09-22 07-00_21992_batch1.xlsx"
-    hierarchy_df = pd.read_excel(hierarchy_path)
-
+if hierarchy_df is not None:
     with st.expander("🔽 विवरण चुनें | Select Details", expanded=True):
+        # Initialize session state for dropdowns
+        if 'region' not in st.session_state:
+            st.session_state.region = None
+        if 'circle' not in st.session_state:
+            st.session_state.circle = None
+        if 'division' not in st.session_state:
+            st.session_state.division = None
+        if 'substation' not in st.session_state:
+            st.session_state.substation = None
+        if 'feeder' not in st.session_state:
+            st.session_state.feeder = None
+        if 'dtr' not in st.session_state:
+            st.session_state.dtr = None
+
         col1, col2 = st.columns(2)
         
         with col1:
-            region = st.selectbox("🌍 क्षेत्र (Region)", hierarchy_df["Region"].unique())
-            circle = st.selectbox("🏛️ सर्कल (Circle)", hierarchy_df[hierarchy_df["Region"] == region]["Circle"].unique())
-            division = st.selectbox("🏢 डिवीजन (Division)", hierarchy_df[hierarchy_df["Circle"] == circle]["Division"].unique())
-            substation = st.selectbox("⚙️ उपकेंद्र (Substation)", hierarchy_df[hierarchy_df["Division"] == division]["Sub station"].unique())
+            region = st.selectbox(
+                "🌍 क्षेत्र (Region)", 
+                options=hierarchy_df["Region"].unique(),
+                index=0
+            )
+            
+            if region:
+                circle_options = hierarchy_df[hierarchy_df["Region"] == region]["Circle"].unique()
+                circle = st.selectbox(
+                    "🏛️ सर्कल (Circle)", 
+                    options=circle_options,
+                    index=0
+                )
+                
+                if circle:
+                    division_options = hierarchy_df[hierarchy_df["Circle"] == circle]["Division"].unique()
+                    division = st.selectbox(
+                        "🏢 डिवीजन (Division)", 
+                        options=division_options,
+                        index=0
+                    )
+                    
+                    if division:
+                        substation_options = hierarchy_df[hierarchy_df["Division"] == division]["Sub station"].unique()
+                        substation = st.selectbox(
+                            "⚙️ उपकेंद्र (Substation)", 
+                            options=substation_options,
+                            index=0
+                        )
         
         with col2:
-            feeder = st.selectbox("🔌 फीडर (Feeder)", hierarchy_df[hierarchy_df["Sub station"] == substation]["Feeder"].unique())
-            dtr = st.selectbox("🧭 डीटीआर का नाम (DTR Name)", hierarchy_df[hierarchy_df["Feeder"] == feeder]["Dtr"].unique())
-            feeder_code = st.selectbox("💡 फीडर कोड (Feeder Code)", hierarchy_df[hierarchy_df["Dtr"] == dtr]["Feeder code"].unique())
-            dtr_code = st.selectbox("📟 डीटीआर कोड (DTR Code)", hierarchy_df[hierarchy_df["Dtr"] == dtr]["Dtr code"].unique())
-
-except Exception as e:
-    st.error(f"⚠️ मास्टर फ़ाइल लोड करने में समस्या | Error loading master file: {e}")
-    region, circle, division, substation, feeder, dtr, dtr_code, feeder_code = [None]*8
+            if 'substation' in locals() and substation:
+                feeder_options = hierarchy_df[hierarchy_df["Sub station"] == substation]["Feeder"].unique()
+                feeder = st.selectbox(
+                    "🔌 फीडर (Feeder)", 
+                    options=feeder_options,
+                    index=0
+                )
+                
+                if feeder:
+                    dtr_options = hierarchy_df[hierarchy_df["Feeder"] == feeder]["Dtr"].unique()
+                    dtr = st.selectbox(
+                        "🧭 डीटीआर का नाम (DTR Name)", 
+                        options=dtr_options,
+                        index=0
+                    )
+                    
+                    if dtr:
+                        feeder_code_options = hierarchy_df[hierarchy_df["Dtr"] == dtr]["Feeder code"].unique()
+                        feeder_code = st.selectbox(
+                            "💡 फीडर कोड (Feeder Code)", 
+                            options=feeder_code_options,
+                            index=0
+                        )
+                        
+                        dtr_code_options = hierarchy_df[hierarchy_df["Dtr"] == dtr]["Dtr code"].unique()
+                        dtr_code = st.selectbox(
+                            "📟 डीटीआर कोड (DTR Code)", 
+                            options=dtr_code_options,
+                            index=0
+                        )
+else:
+    st.error("❌ मास्टर डेटा लोड नहीं हो सका | Master data could not be loaded")
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-# ----------------- MSN CONFIRMATION -----------------
-if dtr_code:
+# ----------------- MSN CONFIRMATION SECTION -----------------
+if hierarchy_df is not None and 'dtr_code' in locals() and dtr_code:
     st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
     
     try:
-        msn_auto = st.selectbox("🔢 डीटीआर मीटर सीरियल नंबर (DTR Meter Serial Number)", 
-                               hierarchy_df[hierarchy_df["Dtr code"] == dtr_code]["Msn"].unique(),
-                               key="msn_auto")
-        
-        final_msn = None
-        new_msn = None
-
-        if msn_auto:
+        msn_options = hierarchy_df[hierarchy_df["Dtr code"] == dtr_code]["Msn"].unique()
+        if len(msn_options) > 0:
+            msn_auto = st.selectbox(
+                "🔢 डीटीआर मीटर सीरियल नंबर (DTR Meter Serial Number)", 
+                options=msn_options,
+                index=0
+            )
+            
             st.markdown("### ✅ डीटीआर मीटर सीरियल नंबर की पुष्टि करें | Confirm DTR Meter Serial Number")
             
             col1, col2 = st.columns([2, 1])
             with col1:
                 st.info(f"**🔍 MDM में दर्ज डीटीआर मीटर सीरियल नंबर:** {msn_auto}")
+            
             with col2:
-                confirm = st.radio("क्या यह सही है? | Is this correct?", 
-                                 ["हाँ, सही है ✅", "नहीं, बदलना है ❌"], 
-                                 horizontal=True)
+                confirm = st.radio(
+                    "क्या यह सही है? | Is this correct?", 
+                    options=["हाँ, सही है ✅", "नहीं, बदलना है ❌"], 
+                    horizontal=True,
+                    index=0
+                )
 
             if confirm == "हाँ, सही है ✅":
                 final_msn = msn_auto
                 st.success("✅ मीटर सीरियल नंबर स्वीकृत | Meter Serial Number Approved")
             else:
-                new_msn = st.text_input("✏️ नया डीटीआर मीटर सीरियल नंबर दर्ज करें | Enter New DTR Meter Serial Number",
-                                       placeholder="नया सीरियल नंबर दर्ज करें")
+                new_msn = st.text_input(
+                    "✏️ नया डीटीआर मीटर सीरियल नंबर दर्ज करें | Enter New DTR Meter Serial Number",
+                    placeholder="नया सीरियल नंबर दर्ज करें | Enter new serial number"
+                )
                 if new_msn:
                     final_msn = new_msn
                     st.success("✅ नया मीटर सीरियल नंबर स्वीकृत | New Meter Serial Number Approved")
+                else:
+                    final_msn = None
+        else:
+            st.warning("⚠️ इस DTR कोड के लिए कोई MSN उपलब्ध नहीं है | No MSN available for this DTR code")
+            final_msn = st.text_input(
+                "✏️ कृपया डीटीआर मीटर सीरियल नंबर दर्ज करें | Please enter DTR Meter Serial Number",
+                placeholder="सीरियल नंबर दर्ज करें | Enter serial number"
+            )
     
     except Exception as e:
         st.error(f"⚠️ MSN लोड करने में त्रुटि | Error loading MSN: {e}")
+        final_msn = st.text_input(
+            "✏️ कृपया डीटीआर मीटर सीरियल नंबर दर्ज करें | Please enter DTR Meter Serial Number",
+            placeholder="सीरियल नंबर दर्ज करें | Enter serial number"
+        )
     
     st.markdown("</div>", unsafe_allow_html=True)
 
-# ----------------- TIME PICKER FUNCTION -----------------
-def attractive_time_picker(label, key):
+# ----------------- SIMPLE TIME PICKER FUNCTION -----------------
+def simple_time_picker(label, key_prefix):
     st.markdown(f"**{label}**")
-    col1, col2, col3, col4 = st.columns([1,1,1,2])
+    col1, col2, col3 = st.columns(3)
+    
     with col1:
-        hour = st.selectbox("घंटा | Hour", [f"{i:02d}" for i in range(1,13)], key=f"{key}_hour")
+        hour = st.selectbox(
+            "घंटा | Hour", 
+            options=[f"{i:02d}" for i in range(1, 13)],
+            key=f"{key_prefix}_hour"
+        )
+    
     with col2:
-        minute = st.selectbox("मिनट | Minute", [f"{i:02d}" for i in range(0,60)], key=f"{key}_minute")
+        minute = st.selectbox(
+            "मिनट | Minute", 
+            options=[f"{i:02d}" for i in range(0, 60)],
+            key=f"{key_prefix}_minute"
+        )
+    
     with col3:
-        am_pm = st.selectbox("AM/PM", ["AM","PM"], key=f"{key}_ampm")
-    with col4:
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown(f"**चयनित समय:** {hour}:{minute} {am_pm}")
+        am_pm = st.selectbox(
+            "AM/PM", 
+            options=["AM", "PM"],
+            key=f"{key_prefix}_ampm"
+        )
+    
     return f"{hour}:{minute} {am_pm}"
 
 # ----------------- DATE & TIME SECTION -----------------
@@ -344,12 +362,16 @@ if 'final_msn' in locals() and final_msn:
     
     with col1:
         st.markdown("#### 📅 दिनांक | Date")
-        date = st.date_input("तारीख चुनें | Select Date", datetime.today(), label_visibility="collapsed")
-        
+        date = st.date_input(
+            "तारीख चुनें | Select Date", 
+            value=datetime.today(),
+            label_visibility="collapsed"
+        )
+    
     with col2:
         st.markdown("#### 🕒 समय | Time")
-        dtr_off_time = attractive_time_picker("बंद करने का समय | Shutdown Time", "off_time")
-        dtr_on_time = attractive_time_picker("चालू करने का समय | Startup Time", "on_time")
+        dtr_off_time = simple_time_picker("बंद करने का समय | Shutdown Time", "off")
+        dtr_on_time = simple_time_picker("चालू करने का समय | Startup Time", "on")
     
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -360,81 +382,106 @@ if 'final_msn' in locals() and final_msn:
     col1, col2 = st.columns(2)
     
     with col1:
-        ae_je_name = st.text_input("👨‍💼 AE/JE का नाम | AE/JE Name", 
-                                 placeholder="अधिकारी का पूरा नाम दर्ज करें")
+        ae_je_name = st.text_input(
+            "👨‍💼 AE/JE का नाम | AE/JE Name", 
+            placeholder="अधिकारी का पूरा नाम दर्ज करें | Enter officer's full name"
+        )
     
     with col2:
-        mobile_number = st.text_input("📱 मोबाइल नंबर | Mobile Number", 
-                                    max_chars=10, 
-                                    placeholder="10 अंकों का नंबर दर्ज करें")
+        mobile_number = st.text_input(
+            "📱 मोबाइल नंबर | Mobile Number", 
+            max_chars=10,
+            placeholder="10 अंकों का नंबर दर्ज करें | Enter 10-digit number"
+        )
     
     st.markdown("</div>", unsafe_allow_html=True)
 
     # ----------------- SUBMIT BUTTON -----------------
     st.markdown("<br>", unsafe_allow_html=True)
     
-    if st.button("🚀 डेटा सबमिट करें | Submit Data", use_container_width=True, type="primary"):
-        if not ae_je_name or not mobile_number:
-            st.error("❌ कृपया अधिकारी का नाम और मोबाइल नंबर दर्ज करें | Please enter officer name and mobile number")
+    submit_clicked = st.button("🚀 डेटा सबमिट करें | Submit Data", use_container_width=True, type="primary")
+    
+    if submit_clicked:
+        # Validation
+        errors = []
+        
+        if not ae_je_name:
+            errors.append("❌ कृपया अधिकारी का नाम दर्ज करें | Please enter officer name")
+        
+        if not mobile_number:
+            errors.append("❌ कृपया मोबाइल नंबर दर्ज करें | Please enter mobile number")
         elif len(mobile_number) != 10 or not mobile_number.isdigit():
-            st.error("❌ कृपया वैध 10-अंकीय मोबाइल नंबर दर्ज करें | Please enter valid 10-digit mobile number")
+            errors.append("❌ कृपया वैध 10-अंकीय मोबाइल नंबर दर्ज करें | Please enter valid 10-digit mobile number")
+        
+        if errors:
+            for error in errors:
+                st.error(error)
         else:
             try:
+                # Generate application number
                 application_number = f"{datetime.now().strftime('%d%m%Y')}{len(sheet.get_all_values()) + 1:04d}"
+                
+                # Prepare data for submission
                 new_data = [
-                    region, circle, division, substation,
-                    feeder, dtr, dtr_code, feeder_code,
-                    msn_auto, new_msn if new_msn else "",
-                    final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y"),
-                    ae_je_name, mobile_number, application_number
+                    region if 'region' in locals() else "",
+                    circle if 'circle' in locals() else "",
+                    division if 'division' in locals() else "",
+                    substation if 'substation' in locals() else "",
+                    feeder if 'feeder' in locals() else "",
+                    dtr if 'dtr' in locals() else "",
+                    dtr_code if 'dtr_code' in locals() else "",
+                    feeder_code if 'feeder_code' in locals() else "",
+                    msn_auto if 'msn_auto' in locals() else "",
+                    new_msn if 'new_msn' in locals() and new_msn else "",
+                    final_msn,
+                    dtr_off_time,
+                    dtr_on_time,
+                    date.strftime("%d-%m-%Y"),
+                    ae_je_name,
+                    mobile_number,
+                    application_number
                 ]
                 
-                sheet.append_row(new_data)
+                # Submit to Google Sheets
+                if sheet:
+                    sheet.append_row(new_data)
                 
                 # SUCCESS MESSAGE
                 st.balloons()
                 st.markdown("<div class='custom-card success-card'>", unsafe_allow_html=True)
                 st.markdown("### 🎉 सफलता | Success!")
-                st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया! | Data successfully saved to Google Sheet!")
+                st.success("✅ डेटा सफलतापूर्वक सबमिट हो गया! | Data submitted successfully!")
                 
                 # CONFIRMATION DETAILS
-                st.markdown("""
+                st.markdown(f"""
                     <div style="
                         border: 2px solid #28a745;
                         border-radius: 12px;
                         padding: 20px;
                         background: linear-gradient(135deg, #f8fff9 0%, #e8f5e8 100%);
                         margin: 15px 0;
-                        font-size:16px;
-                        line-height:1.8;
+                        font-size: 16px;
+                        line-height: 1.8;
                     ">
                         <h4 style="color:#28a745; text-align:center; margin-bottom:15px;">
                             📋 सबमिट किया गया विवरण | Submitted Details
                         </h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                             <div><b>🧾 आवेदन संख्या:</b><br>{application_number}</div>
-                            <div><b>🌐 फीडर:</b><br>{feeder}</div>
-                            <div><b>💡 फीडर कोड:</b><br>{feeder_code}</div>
-                            <div><b>🧭 डीटीआर नाम:</b><br>{dtr}</div>
+                            <div><b>🌐 फीडर:</b><br>{feeder if 'feeder' in locals() else 'N/A'}</div>
+                            <div><b>💡 फीडर कोड:</b><br>{feeder_code if 'feeder_code' in locals() else 'N/A'}</div>
+                            <div><b>🧭 डीटीआर नाम:</b><br>{dtr if 'dtr' in locals() else 'N/A'}</div>
                             <div><b>🔢 डीटीआर MSN:</b><br>{final_msn}</div>
-                            <div><b>⏰ बंद समय:</b><br>{off_time}</div>
-                            <div><b>⚡ चालू समय:</b><br>{on_time}</div>
-                            <div><b>📅 दिनांक:</b><br>{date}</div>
+                            <div><b>⏰ बंद समय:</b><br>{dtr_off_time}</div>
+                            <div><b>⚡ चालू समय:</b><br>{dtr_on_time}</div>
+                            <div><b>📅 दिनांक:</b><br>{date.strftime('%d-%m-%Y')}</div>
                         </div>
                     </div>
-                """.format(
-                    application_number=application_number,
-                    feeder=feeder,
-                    feeder_code=feeder_code,
-                    dtr=dtr,
-                    final_msn=final_msn,
-                    off_time=dtr_off_time,
-                    on_time=dtr_on_time,
-                    date=date.strftime("%d-%m-%Y")
-                ), unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
                 
                 st.markdown("</div>", unsafe_allow_html=True)
                 
+                # SCREENSHOT MESSAGE
                 st.markdown("""
                     <div style='
                         background: #fff3cd;
@@ -459,16 +506,16 @@ if 'final_msn' in locals() and final_msn:
 # ----------------- FOOTER -----------------
 st.markdown("""
     <div class='footer'>
-        <div style='display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;'>
-            <div style='text-align: left;'>
+        <div style='display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;'>
+            <div style='text-align: left; flex: 1;'>
                 <h4 style='color: #ffd700; margin: 0;'>MPEZ - DTR Indexation</h4>
                 <p style='margin: 5px 0; color: #bdc3c7;'>Smart Meter Implementation</p>
             </div>
-            <div style='text-align: center;'>
+            <div style='text-align: center; flex: 1;'>
                 <p style='margin: 0; font-weight: bold;'>Developed by Esyasoft Team</p>
                 <p style='margin: 5px 0; color: #bdc3c7;'>© 2025 All Rights Reserved</p>
             </div>
-            <div style='text-align: right;'>
+            <div style='text-align: right; flex: 1;'>
                 <p style='margin: 0; color: #3498db; font-weight: bold;'>DTR Indexation Portal</p>
                 <p style='margin: 5px 0; color: #bdc3c7;'>Version 2.0</p>
             </div>
@@ -481,7 +528,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ----------------- PARTNER LOGO -----------------
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.image("download (1).png", width=120, caption="Technology Partner: Esyasoft Technologies")
+try:
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.image("download (1).png", width=120, caption="Technology Partner: Esyasoft Technologies")
+except:
+    pass
