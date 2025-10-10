@@ -72,11 +72,10 @@ st.markdown("""
 # ----------------- HEADER -----------------
 # ----------------- HEADER WITH IMAGE -----------------
 # ----------------- HEADER WITH CENTERED IMAGE -----------------
-st.markdown("""
-    <div style='text-align: center;'>
-        <img src='mpez-logo.png' width='300'>
-    </div>
-""", unsafe_allow_html=True)
+# ----------------- HEADER WITH CENTERED IMAGE -----------------
+st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+st.image("mpez-logo.png", width=300)
+st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("""
     <h1 style='text-align: center; color: #004aad; font-size: 36px;'>
