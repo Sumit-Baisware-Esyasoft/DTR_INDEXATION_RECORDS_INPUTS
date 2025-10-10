@@ -164,7 +164,7 @@ if final_msn:
     # ----------------- SUBMIT -----------------
     if st.button("💾 सबमिट करें", use_container_width=True, type="primary"):
         new_data = [
-            region, circle, division, zone, substation,
+            region, circle, division, substation,
             feeder, dtr, dtr_code, feeder_code,
             msn_auto, new_msn if new_msn else "",
             final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y"),
