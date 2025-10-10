@@ -177,35 +177,39 @@ if final_msn:
         # sheet.append_row(new_data)
         st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
 # ✅ Display confirmation box with key details
-        st.markdown("""
-            <div style="
-                border: 2px solid #004aad;
-                border-radius: 12px;
-                padding: 15px;
-                background-color: #f0f4ff;
-                margin-top: 15px;
-                ">
-                <h4 style="color:#004aad; text-align:center; margin-bottom:10px;">🔎 सबमिट किया गया विवरण</h4>
-                <p><b>🧾 आवेदन संख्या (Application No.):</b> {application_number}</p>
-                <p><b>🌐 फीडर (Feeder):</b> {feeder}</p>
-                <p><b>💡 फीडर कोड:</b> {feeder_code}</p>
-                <p><b>🧭 डीटीआर का प्रचलित नाम:</b> {dtr}</p>
-                <p><b>🔢 डीटीआर MSN:</b> {final_msn}</p>
-                <p><b>⏰ डीटीआर बंद करने का समय:</b> {off_time}</p>
-                <p><b>⚡ डीटीआर चालू करने का समय:</b> {on_time}</p>
-                <p><b>📅 दिनांक:</b> {date.strftime("%d-%m-%Y")}</p>
-            </div>
-        """.format(
-            application_number= application_number,
-            feeder=feeder,
-            feeder_code=feeder_code,
-            dtr=dtr,
-            final_msn=final_msn,
-            off_time=dtr_off_time,
-            on_time=dtr_on_time,
-            date=date.strftime("%d-%m-%Y")
-        ), unsafe_allow_html=True)
-        st.subheader("📸 आप उक्त जानकारी का स्क्रीनशॉट अपने फोन पर सुरक्षित रख सकते है ")
+st.markdown("""
+    <div style="
+        border: 2px solid #004aad;
+        border-radius: 12px;
+        padding: 15px;
+        background-color: #f0f4ff;
+        margin-top: 15px;
+        font-size:16px;
+        line-height:1.6;
+        ">
+        <h4 style="color:#004aad; text-align:center; margin-bottom:10px;">🔎 सबमिट किया गया विवरण</h4>
+        <p><b>🧾 आवेदन संख्या (Application No.):</b> {application_number}</p>
+        <p><b>🌐 फीडर (Feeder):</b> {feeder}</p>
+        <p><b>💡 फीडर कोड:</b> {feeder_code}</p>
+        <p><b>🧭 डीटीआर का प्रचलित नाम:</b> {dtr}</p>
+        <p><b>🔢 डीटीआर MSN:</b> {final_msn}</p>
+        <p><b>⏰ डीटीआर बंद करने का समय:</b> {off_time}</p>
+        <p><b>⚡ डीटीआर चालू करने का समय:</b> {on_time}</p>
+        <p><b>📅 दिनांक:</b> {date}</p>
+    </div>
+""".format(
+    application_number=application_number,
+    feeder=feeder,
+    feeder_code=feeder_code,
+    dtr=dtr,
+    final_msn=final_msn,
+    off_time=dtr_off_time,
+    on_time=dtr_on_time,
+    date=date.strftime("%d-%m-%Y")
+), unsafe_allow_html=True)
+
+st.subheader("📸 आप उक्त जानकारी का स्क्रीनशॉट अपने फोन पर सुरक्षित रख सकते हैं ✅")
+
 
 
 # ----------------- FOOTER -----------------
