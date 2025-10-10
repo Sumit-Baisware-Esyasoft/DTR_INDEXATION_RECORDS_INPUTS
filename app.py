@@ -6,15 +6,22 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 # ----------------- PAGE CONFIG -----------------
 st.set_page_config(
-    page_title="DTR से Consumer Indexation की प्रक्रिया",
+    page_title="DTR से Smart Metered Consumer Indexating की प्रक्रिया",
     page_icon="📑",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
 # ----------------- CUSTOM CSS -----------------
-# ----------------- CUSTOM CSS -----------------
 st.markdown("""
     <style>
+        /* Center logo */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
         /* Change dropdown background and text color */
         div[data-baseweb="select"] > div {
             background-color: #f0f4ff !important;  /* Light blue background */
@@ -43,12 +50,21 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# ----------------- LOGO SECTION -----------------
+st.markdown(
+    """
+    <div class='logo-container'>
+        <img src='mpez-logo.png' width='120'>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 
 # ----------------- HEADER -----------------
 st.markdown("""
     <h1 style='text-align: center; color: #004aad; font-size: 36px;'>
-        ⚡ DTR से Consumer Indexation की प्रक्रिया
+        ⚡DTR से Smart Metered Consumer Indexating की प्रक्रियाा
     </h1>
     <p style='text-align: center; color: gray; font-size: 18px;'>
         कृपया नीचे दी गई जानकारी ध्यानपूर्वक भरें।
@@ -77,13 +93,13 @@ try:
         region = st.selectbox("🌍 क्षेत्र (Region)", hierarchy_df["Region"].unique())
         circle = st.selectbox("🏛️ सर्कल (Circle)", hierarchy_df[hierarchy_df["Region"] == region]["Circle"].unique())
         division = st.selectbox("🏢 डिवीजन (Division)", hierarchy_df[hierarchy_df["Circle"] == circle]["Division"].unique())
-        zone = st.selectbox("🏠 वितरण केंद्र (Zone)", hierarchy_df[hierarchy_df["Division"] == division]["Zone"].unique())
-        substation = st.selectbox("⚙️ उपकेंद्र (Substation)", hierarchy_df[hierarchy_df["Zone"] == zone]["Sub station"].unique())
+        # zone = st.selectbox("🏠 वितरण केंद्र (Zone)", hierarchy_df[hierarchy_df["Division"] == division]["Zone"].unique())
+        substation = st.selectbox("⚙️ उपकेंद्र (Substation)", hierarchy_df[hierarchy_df["Division"] == division]["Sub station"].unique())
         feeder = st.selectbox("🔌 फीडर (Feeder)", hierarchy_df[hierarchy_df["Sub station"] == substation]["Feeder"].unique())
-        dtr = st.selectbox("🧭 डीटीआर (DTR)", hierarchy_df[hierarchy_df["Feeder"] == feeder]["Dtr"].unique())
-        dtr_code = st.selectbox("📟 डीटीआर कोड", hierarchy_df[hierarchy_df["Dtr"] == dtr]["Dtr code"].unique())
         feeder_code = st.selectbox("💡 फीडर कोड", hierarchy_df[hierarchy_df["Dtr"] == dtr]["Feeder code"].unique())
-        msn_auto = st.selectbox("🔢 मीटर सीरियल नंबर (MSN)", hierarchy_df[hierarchy_df["Dtr code"] == dtr_code]["Msn"].unique())
+        dtr = st.selectbox("🧭 डीटीआर का प्रचलित नाम (DTR)", hierarchy_df[hierarchy_df["Feeder"] == feeder]["Dtr"].unique())
+        dtr_code = st.selectbox("📟 डीटीआर कोड", hierarchy_df[hierarchy_df["Dtr"] == dtr]["Dtr code"].unique())
+        msn_auto = st.selectbox("🔢डीटीआर मीटर सीरियल नंबर (MSN)", hierarchy_df[hierarchy_df["Dtr code"] == dtr_code]["Msn"].unique())
 
 except Exception as e:
     st.error(f"⚠️ मास्टर फ़ाइल लोड करने में समस्या: {e}")
@@ -121,10 +137,10 @@ def simple_time_picker(label, key):
 if final_msn:
     st.markdown("<hr>", unsafe_allow_html=True)
     st.subheader("⏱️ डीटीआर समय विवरण")
-
+    date = st.date_input("📅 दिनांक चुनें", datetime.today())
     dtr_off_time = simple_time_picker("डीटीआर बंद करने का समय", "off_time")
     dtr_on_time = simple_time_picker("डीटीआर चालू करने का समय", "on_time")
-    date = st.date_input("📅 दिनांक चुनें", datetime.today())
+    
     st.markdown("<hr>", unsafe_allow_html=True)
     st.subheader("👤 अधिकारी की जानकारी")
     ae_je_name = st.text_input("👨‍💼 AE/JE का नाम")
