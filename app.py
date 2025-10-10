@@ -96,8 +96,9 @@ try:
         # zone = st.selectbox("🏠 वितरण केंद्र (Zone)", hierarchy_df[hierarchy_df["Division"] == division]["Zone"].unique())
         substation = st.selectbox("⚙️ उपकेंद्र (Substation)", hierarchy_df[hierarchy_df["Division"] == division]["Sub station"].unique())
         feeder = st.selectbox("🔌 फीडर (Feeder)", hierarchy_df[hierarchy_df["Sub station"] == substation]["Feeder"].unique())
-        feeder_code = st.selectbox("💡 फीडर कोड", hierarchy_df[hierarchy_df["Dtr"] == dtr]["Feeder code"].unique())
         dtr = st.selectbox("🧭 डीटीआर का प्रचलित नाम (DTR)", hierarchy_df[hierarchy_df["Feeder"] == feeder]["Dtr"].unique())
+        feeder_code = st.selectbox("💡 फीडर कोड", hierarchy_df[hierarchy_df["Dtr"] == dtr]["Feeder code"].unique())
+        
         dtr_code = st.selectbox("📟 डीटीआर कोड", hierarchy_df[hierarchy_df["Dtr"] == dtr]["Dtr code"].unique())
         msn_auto = st.selectbox("🔢डीटीआर मीटर सीरियल नंबर (MSN)", hierarchy_df[hierarchy_df["Dtr code"] == dtr_code]["Msn"].unique())
 
