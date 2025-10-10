@@ -161,56 +161,53 @@ if final_msn:
 
 
    # ----------------- SUBMIT -----------------
-    # ----------------- SUBMIT -----------------
-    if st.button("💾 सबमिट करें", use_container_width=True, type="primary"):
-        application_number = f"{datetime.now().strftime('%d%m')}{len(sheet.get_all_values()) + 1:04d}"
-        new_data = [
-            region, circle, division, substation,
-            feeder, dtr, dtr_code, feeder_code,
-            msn_auto, new_msn if new_msn else "",
-            final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y"),
-            ae_je_name, mobile_number,application_number   # ✅ Added two new columns at the end
-        ]
-        
-        # new_data.append(application_number)   # ✅ add unique application number
-        sheet.append_row(new_data)
-        # sheet.append_row(new_data)
-        st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
-# ✅ Display confirmation box with key details
-st.markdown("""
-    <div style="
-        border: 2px solid #004aad;
-        border-radius: 12px;
-        padding: 15px;
-        background-color: #f0f4ff;
-        margin-top: 15px;
-        font-size:16px;
-        line-height:1.6;
-        ">
-        <h4 style="color:#004aad; text-align:center; margin-bottom:10px;">🔎 सबमिट किया गया विवरण</h4>
-        <p><b>🧾 आवेदन संख्या (Application No.):</b> {application_number}</p>
-        <p><b>🌐 फीडर (Feeder):</b> {feeder}</p>
-        <p><b>💡 फीडर कोड:</b> {feeder_code}</p>
-        <p><b>🧭 डीटीआर का प्रचलित नाम:</b> {dtr}</p>
-        <p><b>🔢 डीटीआर MSN:</b> {final_msn}</p>
-        <p><b>⏰ डीटीआर बंद करने का समय:</b> {off_time}</p>
-        <p><b>⚡ डीटीआर चालू करने का समय:</b> {on_time}</p>
-        <p><b>📅 दिनांक:</b> {date}</p>
-    </div>
-""".format(
-    application_number=application_number,
-    feeder=feeder,
-    feeder_code=feeder_code,
-    dtr=dtr,
-    final_msn=final_msn,
-    off_time=dtr_off_time,
-    on_time=dtr_on_time,
-    date=date.strftime("%d-%m-%Y")
-), unsafe_allow_html=True)
+ # ----------------- SUBMIT -----------------
+if st.button("💾 सबमिट करें", use_container_width=True, type="primary"):
+    application_number = f"{datetime.now().strftime('%d%m')}{len(sheet.get_all_values()) + 1:04d}"
+    new_data = [
+        region, circle, division, substation,
+        feeder, dtr, dtr_code, feeder_code,
+        msn_auto, new_msn if new_msn else "",
+        final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y"),
+        ae_je_name, mobile_number, application_number
+    ]
+    
+    sheet.append_row(new_data)
+    st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
+    
+    # ✅ Move the confirmation box INSIDE the button click block
+    st.markdown("""
+        <div style="
+            border: 2px solid #004aad;
+            border-radius: 12px;
+            padding: 15px;
+            background-color: #f0f4ff;
+            margin-top: 15px;
+            font-size:16px;
+            line-height:1.6;
+            ">
+            <h4 style="color:#004aad; text-align:center; margin-bottom:10px;">🔎 सबमिट किया गया विवरण</h4>
+            <p><b>🧾 आवेदन संख्या (Application No.):</b> {application_number}</p>
+            <p><b>🌐 फीडर (Feeder):</b> {feeder}</p>
+            <p><b>💡 फीडर कोड:</b> {feeder_code}</p>
+            <p><b>🧭 डीटीआर का प्रचलित नाम:</b> {dtr}</p>
+            <p><b>🔢 डीटीआर MSN:</b> {final_msn}</p>
+            <p><b>⏰ डीटीआर बंद करने का समय:</b> {off_time}</p>
+            <p><b>⚡ डीटीआर चालू करने का समय:</b> {on_time}</p>
+            <p><b>📅 दिनांक:</b> {date}</p>
+        </div>
+    """.format(
+        application_number=application_number,
+        feeder=feeder,
+        feeder_code=feeder_code,
+        dtr=dtr,
+        final_msn=final_msn,
+        off_time=dtr_off_time,
+        on_time=dtr_on_time,
+        date=date.strftime("%d-%m-%Y")
+    ), unsafe_allow_html=True)
 
-st.subheader("📸 आप उक्त जानकारी का स्क्रीनशॉट अपने फोन पर सुरक्षित रख सकते हैं ✅")
-
-
+    st.subheader("📸 आप उक्त जानकारी का स्क्रीनशॉट अपने फोन पर सुरक्षित रख सकते हैं ✅")
 
 # ----------------- FOOTER -----------------
 st.markdown("<hr>", unsafe_allow_html=True)
