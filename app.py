@@ -170,7 +170,10 @@ if final_msn:
             final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y"),
             ae_je_name, mobile_number   # ✅ Added two new columns at the end
         ]
+        application_number = f"{datetime.now().strftime('%d%m')}{len(sheet.get_all_values()) + 1:04d}"
+        new_data.append(application_number)   # ✅ add unique application number
         sheet.append_row(new_data)
+        # sheet.append_row(new_data)
         st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
 # ✅ Display confirmation box with key details
         st.markdown("""
@@ -182,6 +185,7 @@ if final_msn:
                 margin-top: 15px;
                 ">
                 <h4 style="color:#004aad; text-align:center; margin-bottom:10px;">🔎 सबमिट किया गया विवरण</h4>
+                <p><b>🧾 Application_Number:</b> {application_number}</p>
                 <p><b>🧾 फीडर (Feeder):</b> {feeder}</p>
                 <p><b>🧾 फीडर कोड :</b> {feeder_code}</p>
                 <p><b>🧾 डीटीआर का प्रचलित नाम (DTR):</b> {dtr}</p>
@@ -191,6 +195,7 @@ if final_msn:
                 <p><b>📅 दिनांक:</b> {date}</p>
             </div>
         """.format(
+            application_number= application_number,
             feeder=feeder,
             feeder_code=feeder_code,
             dtr=dtr,
