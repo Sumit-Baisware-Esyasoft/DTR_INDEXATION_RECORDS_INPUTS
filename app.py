@@ -172,6 +172,9 @@ if final_msn:
         ]
         sheet.append_row(new_data)
         st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
+         st.table(pd.DataFrame([new_data], columns=["Final MSN",
+            "डीटीआर बंद करने का समय", "डीटीआर चालू करने का समय", "दिनांक"
+        ]))
 
 
 # ----------------- FOOTER -----------------
