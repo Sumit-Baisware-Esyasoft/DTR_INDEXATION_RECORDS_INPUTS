@@ -163,15 +163,16 @@ if final_msn:
    # ----------------- SUBMIT -----------------
     # ----------------- SUBMIT -----------------
     if st.button("💾 सबमिट करें", use_container_width=True, type="primary"):
+        application_number = f"{datetime.now().strftime('%d%m')}{len(sheet.get_all_values()) + 1:04d}"
         new_data = [
             region, circle, division, substation,
             feeder, dtr, dtr_code, feeder_code,
             msn_auto, new_msn if new_msn else "",
             final_msn, dtr_off_time, dtr_on_time, date.strftime("%d-%m-%Y"),
-            ae_je_name, mobile_number   # ✅ Added two new columns at the end
+            ae_je_name, mobile_number,application_number   # ✅ Added two new columns at the end
         ]
-        application_number = f"{datetime.now().strftime('%d%m')}{len(sheet.get_all_values()) + 1:04d}"
-        new_data.append(application_number)   # ✅ add unique application number
+        
+        # new_data.append(application_number)   # ✅ add unique application number
         sheet.append_row(new_data)
         # sheet.append_row(new_data)
         st.success("✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!")
