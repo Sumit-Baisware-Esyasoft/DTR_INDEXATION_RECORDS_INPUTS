@@ -11,7 +11,6 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed"
 )
-st.markdown("<style>html { color-scheme: light !important; }</style>", unsafe_allow_html=True)
 
 # ----------------- CUSTOM CSS -----------------
 st.markdown("""
@@ -326,7 +325,6 @@ if hierarchy_df is not None and 'dtr_code' in locals() and dtr_code:
     
     st.markdown("</div>", unsafe_allow_html=True)
 
-# ----------------- SIMPLE TIME PICKER FUNCTION -----------------
 # ----------------- SIMPLE TIME PICKER FUNCTION WITH VALIDATION -----------------
 def simple_time_picker(label, key_prefix, min_hour=None, min_minute=None, min_ampm=None):
     st.markdown(f"**{label}**")
@@ -392,8 +390,18 @@ if 'final_msn' in locals() and final_msn:
     
     with col2:
         st.markdown("#### 🕒 समय | Time")
+        
+        # First get the off time
         dtr_off_time = simple_time_picker("बंद करने का समय | Shutdown Time", "off")
-        dtr_on_time = simple_time_picker("चालू करने का समय | Startup Time", "on")
+        
+        # Extract off time components for validation
+        off_hour = st.session_state.get("off_hour", "01")
+        off_minute = st.session_state.get("off_minute", "00")
+        off_ampm = st.session_state.get("off_ampm", "AM")
+        
+        # Then get on time with validation to ensure it's after off time
+        dtr_on_time = simple_time_picker("चालू करने का समय | Startup Time", "on", 
+                                        off_hour, off_minute, off_ampm)
     
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -434,6 +442,29 @@ if 'final_msn' in locals() and final_msn:
             errors.append("❌ कृपया मोबाइल नंबर दर्ज करें | Please enter mobile number")
         elif len(mobile_number) != 10 or not mobile_number.isdigit():
             errors.append("❌ कृपया वैध 10-अंकीय मोबाइल नंबर दर्ज करें | Please enter valid 10-digit mobile number")
+        
+        # Time validation
+        off_hour = st.session_state.get("off_hour", "01")
+        off_minute = st.session_state.get("off_minute", "00")
+        off_ampm = st.session_state.get("off_ampm", "AM")
+        on_hour = st.session_state.get("on_hour", "01")
+        on_minute = st.session_state.get("on_minute", "00")
+        on_ampm = st.session_state.get("on_ampm", "AM")
+        
+        def convert_to_minutes(hour, minute, ampm):
+            hour_int = int(hour)
+            minute_int = int(minute)
+            if ampm == "PM" and hour_int != 12:
+                hour_int += 12
+            elif ampm == "AM" and hour_int == 12:
+                hour_int = 0
+            return hour_int * 60 + minute_int
+        
+        off_minutes = convert_to_minutes(off_hour, off_minute, off_ampm)
+        on_minutes = convert_to_minutes(on_hour, on_minute, on_ampm)
+        
+        if on_minutes <= off_minutes:
+            errors.append("❌ DTR चालू समय बंद समय के बाद होना चाहिए | DTR on time must be after off time")
         
         if errors:
             for error in errors:
