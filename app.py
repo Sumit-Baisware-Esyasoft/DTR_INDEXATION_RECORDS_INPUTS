@@ -88,7 +88,7 @@ st.markdown("""
             border: 2px solid #e0e0e0;
         }
         
-        /* Expander styling */
+        /* Expander styling - FIXED FONT COLOR */
         .streamlit-expanderHeader {
             background: linear-gradient(135deg, #004aad 0%, #002966 100%) !important;
             color: white !important;
@@ -96,6 +96,14 @@ st.markdown("""
             font-weight: 700 !important;
             font-size: 18px !important;
             border: none !important;
+        }
+        
+        .streamlit-expanderHeader p {
+            color: white !important;
+        }
+        
+        .streamlit-expanderHeader span {
+            color: white !important;
         }
         
         .streamlit-expanderContent {
@@ -122,6 +130,11 @@ st.markdown("""
         /* Fix column spacing */
         .stColumn {
             padding: 10px;
+        }
+        
+        /* Ensure text color in expander is visible in both light and dark modes */
+        .streamlit-expanderHeader .st-emotion-cache-16idsys p {
+            color: white !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -325,31 +338,51 @@ if hierarchy_df is not None and 'dtr_code' in locals() and dtr_code:
     
     st.markdown("</div>", unsafe_allow_html=True)
 
-# ----------------- SIMPLE TIME PICKER FUNCTION -----------------
-def simple_time_picker(label, key_prefix):
+# ----------------- SIMPLE TIME PICKER FUNCTION WITH VALIDATION -----------------
+def simple_time_picker(label, key_prefix, min_hour=None, min_minute=None, min_ampm=None):
     st.markdown(f"**{label}**")
     col1, col2, col3 = st.columns(3)
     
+    # Convert time to 24-hour format for comparison
+    def convert_to_24h(hour, minute, ampm):
+        hour_int = int(hour)
+        if ampm == "PM" and hour_int != 12:
+            hour_int += 12
+        elif ampm == "AM" and hour_int == 12:
+            hour_int = 0
+        return hour_int, int(minute)
+    
     with col1:
+        hour_options = [f"{i:02d}" for i in range(1, 13)]
         hour = st.selectbox(
             "घंटा | Hour", 
-            options=[f"{i:02d}" for i in range(1, 13)],
+            options=hour_options,
             key=f"{key_prefix}_hour"
         )
     
     with col2:
+        minute_options = [f"{i:02d}" for i in range(0, 60)]
         minute = st.selectbox(
             "मिनट | Minute", 
-            options=[f"{i:02d}" for i in range(0, 60)],
+            options=minute_options,
             key=f"{key_prefix}_minute"
         )
     
     with col3:
+        am_pm_options = ["AM", "PM"]
         am_pm = st.selectbox(
             "AM/PM", 
-            options=["AM", "PM"],
+            options=am_pm_options,
             key=f"{key_prefix}_ampm"
         )
+    
+    # Validation for on-time to be after off-time
+    if min_hour and min_minute and min_ampm:
+        current_time_24h = convert_to_24h(hour, minute, am_pm)
+        min_time_24h = convert_to_24h(min_hour, min_minute, min_ampm)
+        
+        if current_time_24h < min_time_24h:
+            st.warning(f"⚠️ DTR चालू समय बंद समय ({min_hour}:{min_minute} {min_ampm}) के बाद होना चाहिए | DTR on time must be after off time")
     
     return f"{hour}:{minute} {am_pm}"
 
@@ -370,8 +403,18 @@ if 'final_msn' in locals() and final_msn:
     
     with col2:
         st.markdown("#### 🕒 समय | Time")
+        
+        # First get the off time
         dtr_off_time = simple_time_picker("बंद करने का समय | Shutdown Time", "off")
-        dtr_on_time = simple_time_picker("चालू करने का समय | Startup Time", "on")
+        
+        # Extract off time components for validation
+        off_hour = st.session_state.get("off_hour", "01")
+        off_minute = st.session_state.get("off_minute", "00")
+        off_ampm = st.session_state.get("off_ampm", "AM")
+        
+        # Then get on time with validation to ensure it's after off time
+        dtr_on_time = simple_time_picker("चालू करने का समय | Startup Time", "on", 
+                                        off_hour, off_minute, off_ampm)
     
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -412,6 +455,29 @@ if 'final_msn' in locals() and final_msn:
             errors.append("❌ कृपया मोबाइल नंबर दर्ज करें | Please enter mobile number")
         elif len(mobile_number) != 10 or not mobile_number.isdigit():
             errors.append("❌ कृपया वैध 10-अंकीय मोबाइल नंबर दर्ज करें | Please enter valid 10-digit mobile number")
+        
+        # Time validation
+        off_hour = st.session_state.get("off_hour", "01")
+        off_minute = st.session_state.get("off_minute", "00")
+        off_ampm = st.session_state.get("off_ampm", "AM")
+        on_hour = st.session_state.get("on_hour", "01")
+        on_minute = st.session_state.get("on_minute", "00")
+        on_ampm = st.session_state.get("on_ampm", "AM")
+        
+        def convert_to_minutes(hour, minute, ampm):
+            hour_int = int(hour)
+            minute_int = int(minute)
+            if ampm == "PM" and hour_int != 12:
+                hour_int += 12
+            elif ampm == "AM" and hour_int == 12:
+                hour_int = 0
+            return hour_int * 60 + minute_int
+        
+        off_minutes = convert_to_minutes(off_hour, off_minute, off_ampm)
+        on_minutes = convert_to_minutes(on_hour, on_minute, on_ampm)
+        
+        if on_minutes <= off_minutes:
+            errors.append("❌ DTR चालू समय बंद समय के बाद होना चाहिए | DTR on time must be after off time")
         
         if errors:
             for error in errors:
