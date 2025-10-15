@@ -48,11 +48,36 @@ st.markdown("""
             box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
         }
         
-        /* Dropdown styling - FIXED */
+        /* DARK MODE COMPATIBILITY - FIXED TEXT COLORS */
+        
+        /* Global text color for dark mode compatibility */
+        .stApp {
+            color: #1a1a1a !important;
+        }
+        
+        /* Ensure all text has proper contrast */
+        h1, h2, h3, h4, h5, h6, p, span, div, label {
+            color: #1a1a1a !important;
+        }
+        
+        /* Dropdown styling - IMPROVED FOR DARK MODE */
         .stSelectbox > div > div {
-            background-color: #f8f9fa !important;
+            background-color: #ffffff !important;
             border: 2px solid #004aad !important;
             border-radius: 10px !important;
+            color: #1a1a1a !important;
+        }
+        
+        /* Selected option text color in dropdown */
+        .stSelectbox > div > div > div {
+            color: #1a1a1a !important;
+            background-color: #ffffff !important;
+        }
+        
+        /* Dropdown options */
+        .stSelectbox [data-testid="stSelectbox"] option {
+            color: #1a1a1a !important;
+            background-color: #ffffff !important;
         }
         
         /* Button styling */
@@ -72,23 +97,34 @@ st.markdown("""
             border: 2px solid #004aad !important;
             border-radius: 10px !important;
             padding: 12px !important;
+            background-color: #ffffff !important;
+            color: #1a1a1a !important;
         }
         
         /* Date input styling */
         .stDateInput > div > div > input {
             border: 2px solid #004aad !important;
             border-radius: 10px !important;
+            background-color: #ffffff !important;
+            color: #1a1a1a !important;
         }
         
         /* Radio button styling */
         .stRadio > div {
-            background: #f8f9fa;
+            background: #f8f9fa !important;
             padding: 15px;
             border-radius: 10px;
             border: 2px solid #e0e0e0;
+            color: #1a1a1a !important;
         }
         
-        /* Expander styling - FIXED FONT COLOR */
+        /* Radio button labels */
+        .stRadio label {
+            color: #1a1a1a !important;
+            font-weight: 500;
+        }
+        
+        /* Expander styling - FIXED FOR DARK MODE */
         .streamlit-expanderHeader {
             background: linear-gradient(135deg, #004aad 0%, #002966 100%) !important;
             color: white !important;
@@ -98,35 +134,31 @@ st.markdown("""
             border: none !important;
         }
         
-        .streamlit-expanderHeader p {
-            color: white !important;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
-        }
-        
-        .streamlit-expanderHeader span {
+        .streamlit-expanderHeader p, .streamlit-expanderHeader span {
             color: white !important;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
         }
         
         .streamlit-expanderContent {
-            background: #f8f9fa !important;
+            background: #ffffff !important;
             border-radius: 0 0 10px 10px !important;
             padding: 20px !important;
+            color: #1a1a1a !important;
         }
         
         /* Footer styling */
         .footer {
             background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
+            color: white !important;
             padding: 20px;
             border-radius: 15px;
             text-align: center;
             margin-top: 30px;
         }
         
-        /* Remove default Streamlit styling */
-        .stApp {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        .footer h4, .footer p {
+            color: white !important;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
         }
         
         /* Fix column spacing */
@@ -134,107 +166,142 @@ st.markdown("""
             padding: 10px;
         }
         
-        /* Ensure text color in expander is visible in both light and dark modes */
-        .streamlit-expanderHeader .st-emotion-cache-16idsys p {
-            color: white !important;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
+        /* TEXT BACKGROUNDS FOR BETTER VISIBILITY */
+        
+        /* Main headers with background */
+        h1, h2, h3 {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+            padding: 10px 15px !important;
+            border-radius: 10px !important;
+            border-left: 4px solid #004aad !important;
+            display: inline-block !important;
+            margin-bottom: 15px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+            color: #1a1a1a !important;
         }
         
-        /* UNIVERSAL TEXT SHADOW FOR ALL VISIBLE TEXT */
-        /* Main headers and titles */
-        h1, h2, h3, h4, h5, h6 {
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3) !important;
+        /* Labels with background */
+        .stSelectbox label, .stTextInput label, .stDateInput label, .stRadio label {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f2f6 100%) !important;
+            padding: 8px 12px !important;
+            border-radius: 8px !important;
+            border: 1px solid #e0e0e0 !important;
+            display: inline-block !important;
+            margin-bottom: 8px !important;
+            font-weight: 600 !important;
+            color: #1a1a1a !important;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
         }
         
-        /* All paragraph text */
-        p {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
-        }
-        
-        /* Labels and form text */
-        label {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
-        }
-        
-        /* Selectbox labels and text */
-        .stSelectbox label {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
-        }
-        
-        /* Text input labels */
-        .stTextInput label {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
-        }
-        
-        /* Date input labels */
-        .stDateInput label {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
-        }
-        
-        /* Radio button labels */
-        .stRadio label {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
-        }
-        
-        /* Button text */
-        .stButton button {
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
-        }
-        
-        /* Info, success, warning, error messages */
+        /* Alert messages with better contrast */
         .stAlert {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+            border-radius: 10px !important;
+            padding: 15px !important;
+            border-left: 4px solid !important;
+            color: #1a1a1a !important;
         }
         
-        /* Success messages */
         .stSuccess {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+            border-left-color: #28a745 !important;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%) !important;
         }
         
-        /* Warning messages */
         .stWarning {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+            border-left-color: #ffc107 !important;
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%) !important;
         }
         
-        /* Error messages */
         .stError {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+            border-left-color: #dc3545 !important;
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%) !important;
         }
         
-        /* Info messages */
         .stInfo {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+            border-left-color: #17a2b8 !important;
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%) !important;
         }
         
-        /* Markdown text */
-        .stMarkdown {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
+        /* Card text with proper contrast */
+        .custom-card h3, .custom-card p, .custom-card label, .custom-card div {
+            color: #1a1a1a !important;
+            background: transparent !important;
         }
         
-        /* All text elements in streamlit */
-        .stText, .stMarkdown p, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, 
-        .stMarkdown h4, .stMarkdown h5, .stMarkdown h6, .stMarkdown li {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
+        /* Time picker section backgrounds */
+        .stMarkdown h4 {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+            padding: 8px 12px !important;
+            border-radius: 8px !important;
+            border-left: 3px solid #004aad !important;
+            display: inline-block !important;
+            margin: 10px 0 !important;
+            color: #1a1a1a !important;
         }
         
-        /* Specific styling for card content */
-        .custom-card h3, .custom-card p, .custom-card label {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
+        /* Selectbox options background */
+        div[data-baseweb="select"] div {
+            background-color: #ffffff !important;
+            color: #1a1a1a !important;
         }
         
-        /* Footer text */
-        .footer h4, .footer p {
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
-        }
-        
-        /* Expander content text */
-        .streamlit-expanderContent p, .streamlit-expanderContent label {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
-        }
-        
-        /* Placeholder text visibility */
+        /* Placeholder text */
         input::placeholder {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.1) !important;
+            color: #666666 !important;
+            opacity: 1 !important;
+        }
+        
+        /* Force white background for all form elements */
+        .stSelectbox, .stTextInput, .stDateInput, .stRadio {
+            background-color: #ffffff !important;
+            padding: 5px;
+            border-radius: 8px;
+        }
+        
+        /* Ensure all text in widgets is visible */
+        [data-testid="stSelectbox"] *, 
+        [data-testid="stTextInput"] *, 
+        [data-testid="stDateInput"] *, 
+        [data-testid="stRadio"] * {
+            color: #1a1a1a !important;
+        }
+        
+        /* Success card text */
+        .success-card h3, .success-card p, .success-card div {
+            color: #155724 !important;
+        }
+        
+        /* Universal text shadow for better readability */
+        h1, h2, h3, h4, h5, h6, p, label, span, div {
+            text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8) !important;
+        }
+        
+        /* Dark mode specific overrides */
+        @media (prefers-color-scheme: dark) {
+            .stApp {
+                background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%) !important;
+            }
+            
+            .custom-card {
+                background: #2d3748 !important;
+                border: 2px solid #4a5568 !important;
+                color: #ffffff !important;
+            }
+            
+            .custom-card h3, .custom-card p, .custom-card label, .custom-card div {
+                color: #ffffff !important;
+            }
+            
+            h1, h2, h3 {
+                background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%) !important;
+                color: #ffffff !important;
+            }
+            
+            .stSelectbox label, .stTextInput label, .stDateInput label, .stRadio label {
+                background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%) !important;
+                color: #ffffff !important;
+                border: 1px solid #718096 !important;
+            }
         }
     </style>
 """, unsafe_allow_html=True)
@@ -249,6 +316,9 @@ st.markdown("""
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5) !important;
             letter-spacing: 0.5px;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
         '>
             ⚡ DTR Smart Metered Consumer Indexing Process
         </h1>
@@ -258,6 +328,7 @@ st.markdown("""
             margin: 10px 0 0 0;
             font-weight: 500;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.6) !important;
+            background: transparent !important;
         '>
             कृपया नीचे दी गई जानकारी ध्यानपूर्वक भरें | Please fill the below information carefully
         </p>
@@ -300,20 +371,6 @@ st.markdown("### 🗂️ सिस्टम जानकारी | System Infor
 
 if hierarchy_df is not None:
     with st.expander("🔽 विवरण चुनें | Select Details", expanded=True):
-        # Initialize session state for dropdowns
-        if 'region' not in st.session_state:
-            st.session_state.region = None
-        if 'circle' not in st.session_state:
-            st.session_state.circle = None
-        if 'division' not in st.session_state:
-            st.session_state.division = None
-        if 'substation' not in st.session_state:
-            st.session_state.substation = None
-        if 'feeder' not in st.session_state:
-            st.session_state.feeder = None
-        if 'dtr' not in st.session_state:
-            st.session_state.dtr = None
-
         col1, col2 = st.columns(2)
         
         with col1:
@@ -420,7 +477,7 @@ if hierarchy_df is not None and 'dtr_code' in locals() and dtr_code:
                 )
                 if new_msn:
                     final_msn = new_msn
-                    st.success("✅ नया मीटर सीटर सीरियल नंबर स्वीकृत | New Meter Serial Number Approved")
+                    st.success("✅ नया मीटर सीरियल नंबर स्वीकृत | New Meter Serial Number Approved")
                 else:
                     final_msn = None
         else:
@@ -630,18 +687,18 @@ if 'final_msn' in locals() and final_msn:
                         font-size: 16px;
                         line-height: 1.8;
                     ">
-                        <h4 style="color:#28a745; text-align:center; margin-bottom:15px; text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;">
+                        <h4 style="color:#155724; text-align:center; margin-bottom:15px; text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8) !important;">
                             📋 सबमिट किया गया विवरण | Submitted Details
                         </h4>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>🧾 आवेदन संख्या:</b><br>{application_number}</div>
-                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>🌐 फीडर:</b><br>{feeder if 'feeder' in locals() else 'N/A'}</div>
-                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>💡 फीडर कोड:</b><br>{feeder_code if 'feeder_code' in locals() else 'N/A'}</div>
-                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>🧭 डीटीआर नाम:</b><br>{dtr if 'dtr' in locals() else 'N/A'}</div>
-                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>🔢 डीटीआर MSN:</b><br>{final_msn}</div>
-                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>⏰ बंद समय:</b><br>{dtr_off_time}</div>
-                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>⚡ चालू समय:</b><br>{dtr_on_time}</div>
-                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>📅 दिनांक:</b><br>{date.strftime('%d-%m-%Y')}</div>
+                            <div style="color:#155724; text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8) !important;"><b>🧾 आवेदन संख्या:</b><br>{application_number}</div>
+                            <div style="color:#155724; text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8) !important;"><b>🌐 फीडर:</b><br>{feeder if 'feeder' in locals() else 'N/A'}</div>
+                            <div style="color:#155724; text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8) !important;"><b>💡 फीडर कोड:</b><br>{feeder_code if 'feeder_code' in locals() else 'N/A'}</div>
+                            <div style="color:#155724; text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8) !important;"><b>🧭 डीटीआर नाम:</b><br>{dtr if 'dtr' in locals() else 'N/A'}</div>
+                            <div style="color:#155724; text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8) !important;"><b>🔢 डीटीआर MSN:</b><br>{final_msn}</div>
+                            <div style="color:#155724; text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8) !important;"><b>⏰ बंद समय:</b><br>{dtr_off_time}</div>
+                            <div style="color:#155724; text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8) !important;"><b>⚡ चालू समय:</b><br>{dtr_on_time}</div>
+                            <div style="color:#155724; text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8) !important;"><b>📅 दिनांक:</b><br>{date.strftime('%d-%m-%Y')}</div>
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
@@ -658,10 +715,10 @@ if 'final_msn' in locals() and final_msn:
                         text-align: center;
                         margin: 15px 0;
                     '>
-                        <h4 style='color: #856404; margin: 0; text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;'>
+                        <h4 style='color: #856404; margin: 0; text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8) !important;'>
                             📸 स्क्रीनशॉट सुरक्षित रखें | Save Screenshot
                         </h4>
-                        <p style='color: #856404; margin: 5px 0 0 0; text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;'>
+                        <p style='color: #856404; margin: 5px 0 0 0; text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8) !important;'>
                             उपरोक्त जानकारी का स्क्रीनशॉट अपने रिकॉर्ड के लिए सुरक्षित रखें
                         </p>
                     </div>
