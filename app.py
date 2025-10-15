@@ -4,8 +4,32 @@ from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-st.markdown("<style>body {color: black !important; background-color: white !important;}</style>", unsafe_allow_html=True)
-
+# FORCE LIGHT MODE PERMANENTLY
+st.set_page_config(initial_sidebar_state="collapsed")  # Keep your existing config
+st.markdown("""
+    <style>
+        /* Force light theme */
+        .stApp {
+            color-scheme: light !important;
+        }
+        
+        /* Force light background and dark text */
+        body {
+            color: #000000 !important;
+            background-color: #ffffff !important;
+        }
+        
+        /* Force all text to be visible */
+        * {
+            color: #000000 !important;
+        }
+        
+        /* Force widget backgrounds to be light */
+        .stSelectbox, .stTextInput, .stDateInput, .stRadio {
+            background-color: #ffffff !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
 # ----------------- PAGE CONFIG -----------------
 st.set_page_config(
     page_title="DTR Smart Meter Indexing Portal",
