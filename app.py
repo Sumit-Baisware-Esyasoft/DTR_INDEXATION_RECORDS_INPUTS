@@ -11,6 +11,7 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed"
 )
+st.markdown("<style>html { color-scheme: light !important; }</style>", unsafe_allow_html=True)
 
 # ----------------- CUSTOM CSS -----------------
 st.markdown("""
