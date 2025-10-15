@@ -100,10 +100,12 @@ st.markdown("""
         
         .streamlit-expanderHeader p {
             color: white !important;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
         }
         
         .streamlit-expanderHeader span {
             color: white !important;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
         }
         
         .streamlit-expanderContent {
@@ -135,6 +137,104 @@ st.markdown("""
         /* Ensure text color in expander is visible in both light and dark modes */
         .streamlit-expanderHeader .st-emotion-cache-16idsys p {
             color: white !important;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
+        }
+        
+        /* UNIVERSAL TEXT SHADOW FOR ALL VISIBLE TEXT */
+        /* Main headers and titles */
+        h1, h2, h3, h4, h5, h6 {
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3) !important;
+        }
+        
+        /* All paragraph text */
+        p {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
+        }
+        
+        /* Labels and form text */
+        label {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+        }
+        
+        /* Selectbox labels and text */
+        .stSelectbox label {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+        }
+        
+        /* Text input labels */
+        .stTextInput label {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+        }
+        
+        /* Date input labels */
+        .stDateInput label {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+        }
+        
+        /* Radio button labels */
+        .stRadio label {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+        }
+        
+        /* Button text */
+        .stButton button {
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
+        }
+        
+        /* Info, success, warning, error messages */
+        .stAlert {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
+        }
+        
+        /* Success messages */
+        .stSuccess {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+        }
+        
+        /* Warning messages */
+        .stWarning {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+        }
+        
+        /* Error messages */
+        .stError {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+        }
+        
+        /* Info messages */
+        .stInfo {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+        }
+        
+        /* Markdown text */
+        .stMarkdown {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
+        }
+        
+        /* All text elements in streamlit */
+        .stText, .stMarkdown p, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, 
+        .stMarkdown h4, .stMarkdown h5, .stMarkdown h6, .stMarkdown li {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
+        }
+        
+        /* Specific styling for card content */
+        .custom-card h3, .custom-card p, .custom-card label {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
+        }
+        
+        /* Footer text */
+        .footer h4, .footer p {
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
+        }
+        
+        /* Expander content text */
+        .streamlit-expanderContent p, .streamlit-expanderContent label {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
+        }
+        
+        /* Placeholder text visibility */
+        input::placeholder {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.1) !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -147,7 +247,7 @@ st.markdown("""
             font-size: 32px; 
             margin: 0;
             font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5) !important;
             letter-spacing: 0.5px;
         '>
             ⚡ DTR Smart Metered Consumer Indexing Process
@@ -157,6 +257,7 @@ st.markdown("""
             font-size: 18px; 
             margin: 10px 0 0 0;
             font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6) !important;
         '>
             कृपया नीचे दी गई जानकारी ध्यानपूर्वक भरें | Please fill the below information carefully
         </p>
@@ -319,7 +420,7 @@ if hierarchy_df is not None and 'dtr_code' in locals() and dtr_code:
                 )
                 if new_msn:
                     final_msn = new_msn
-                    st.success("✅ नया मीटर सीरियल नंबर स्वीकृत | New Meter Serial Number Approved")
+                    st.success("✅ नया मीटर सीटर सीरियल नंबर स्वीकृत | New Meter Serial Number Approved")
                 else:
                     final_msn = None
         else:
@@ -529,18 +630,18 @@ if 'final_msn' in locals() and final_msn:
                         font-size: 16px;
                         line-height: 1.8;
                     ">
-                        <h4 style="color:#28a745; text-align:center; margin-bottom:15px;">
+                        <h4 style="color:#28a745; text-align:center; margin-bottom:15px; text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;">
                             📋 सबमिट किया गया विवरण | Submitted Details
                         </h4>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <div><b>🧾 आवेदन संख्या:</b><br>{application_number}</div>
-                            <div><b>🌐 फीडर:</b><br>{feeder if 'feeder' in locals() else 'N/A'}</div>
-                            <div><b>💡 फीडर कोड:</b><br>{feeder_code if 'feeder_code' in locals() else 'N/A'}</div>
-                            <div><b>🧭 डीटीआर नाम:</b><br>{dtr if 'dtr' in locals() else 'N/A'}</div>
-                            <div><b>🔢 डीटीआर MSN:</b><br>{final_msn}</div>
-                            <div><b>⏰ बंद समय:</b><br>{dtr_off_time}</div>
-                            <div><b>⚡ चालू समय:</b><br>{dtr_on_time}</div>
-                            <div><b>📅 दिनांक:</b><br>{date.strftime('%d-%m-%Y')}</div>
+                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>🧾 आवेदन संख्या:</b><br>{application_number}</div>
+                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>🌐 फीडर:</b><br>{feeder if 'feeder' in locals() else 'N/A'}</div>
+                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>💡 फीडर कोड:</b><br>{feeder_code if 'feeder_code' in locals() else 'N/A'}</div>
+                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>🧭 डीटीआर नाम:</b><br>{dtr if 'dtr' in locals() else 'N/A'}</div>
+                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>🔢 डीटीआर MSN:</b><br>{final_msn}</div>
+                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>⏰ बंद समय:</b><br>{dtr_off_time}</div>
+                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>⚡ चालू समय:</b><br>{dtr_on_time}</div>
+                            <div style="text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;"><b>📅 दिनांक:</b><br>{date.strftime('%d-%m-%Y')}</div>
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
@@ -557,10 +658,10 @@ if 'final_msn' in locals() and final_msn:
                         text-align: center;
                         margin: 15px 0;
                     '>
-                        <h4 style='color: #856404; margin: 0;'>
+                        <h4 style='color: #856404; margin: 0; text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;'>
                             📸 स्क्रीनशॉट सुरक्षित रखें | Save Screenshot
                         </h4>
-                        <p style='color: #856404; margin: 5px 0 0 0;'>
+                        <p style='color: #856404; margin: 5px 0 0 0; text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;'>
                             उपरोक्त जानकारी का स्क्रीनशॉट अपने रिकॉर्ड के लिए सुरक्षित रखें
                         </p>
                     </div>
@@ -574,20 +675,20 @@ st.markdown("""
     <div class='footer'>
         <div style='display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;'>
             <div style='text-align: left; flex: 1;'>
-                <h4 style='color: #ffd700; margin: 0;'>MPEZ - DTR Indexation</h4>
-                <p style='margin: 5px 0; color: #bdc3c7;'>Smart Meter Implementation</p>
+                <h4 style='color: #ffd700; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;'>MPEZ - DTR Indexation</h4>
+                <p style='margin: 5px 0; color: #bdc3c7; text-shadow: 1px 1px 1px rgba(0,0,0,0.4) !important;'>Smart Meter Implementation</p>
             </div>
             <div style='text-align: center; flex: 1;'>
-                <p style='margin: 0; font-weight: bold;'>Developed by Esyasoft Team</p>
-                <p style='margin: 5px 0; color: #bdc3c7;'>© 2025 All Rights Reserved</p>
+                <p style='margin: 0; font-weight: bold; text-shadow: 1px 1px 1px rgba(0,0,0,0.4) !important;'>Developed by Esyasoft Team</p>
+                <p style='margin: 5px 0; color: #bdc3c7; text-shadow: 1px 1px 1px rgba(0,0,0,0.4) !important;'>© 2025 All Rights Reserved</p>
             </div>
             <div style='text-align: right; flex: 1;'>
-                <p style='margin: 0; color: #3498db; font-weight: bold;'>DTR Indexation Portal</p>
-                <p style='margin: 5px 0; color: #bdc3c7;'>Version 2.0</p>
+                <p style='margin: 0; color: #3498db; font-weight: bold; text-shadow: 1px 1px 1px rgba(0,0,0,0.4) !important;'>DTR Indexation Portal</p>
+                <p style='margin: 5px 0; color: #bdc3c7; text-shadow: 1px 1px 1px rgba(0,0,0,0.4) !important;'>Version 2.0</p>
             </div>
         </div>
         <hr style='border-color: #7f8c8d; margin: 15px 0;'>
-        <p style='color: #95a5a6; font-size: 14px; margin: 0;'>
+        <p style='color: #95a5a6; font-size: 14px; margin: 0; text-shadow: 1px 1px 1px rgba(0,0,0,0.4) !important;'>
             🔒 Secure & Reliable Data Collection System
         </p>
     </div>
