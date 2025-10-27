@@ -173,6 +173,7 @@ except Exception as e:
 def load_hierarchy_data():
     try:
         hierarchy_path = r"DTR Master Information.xlsx"
+        # Daily new file 
         return pd.read_excel(hierarchy_path)
     except Exception as e:
         st.error(f"Error loading master file: {e}")
