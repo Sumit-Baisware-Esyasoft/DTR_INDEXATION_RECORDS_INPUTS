@@ -323,6 +323,14 @@ if hierarchy_df is not None and 'dtr_code' in locals() and dtr_code:
             placeholder="सीरियल नंबर दर्ज करें | Enter serial number"
         )
     
+    # ----------------- CT RATIO SECTION -----------------
+    st.markdown("### 🔌 CT Ratio Selection")
+    ct_ratio = st.selectbox(
+        "⚡ CT Ratio", 
+        options=["(100/5A)", "(200/5A)", "(300/5A)", "(400/5A)", "(500/5A)", "(600/5A)"],
+        index=0
+    )
+    
     st.markdown("</div>", unsafe_allow_html=True)
 
 # ----------------- SIMPLE TIME PICKER FUNCTION WITH VALIDATION -----------------
@@ -492,7 +500,8 @@ if 'final_msn' in locals() and final_msn:
                     date.strftime("%d-%m-%Y"),
                     ae_je_name,
                     mobile_number,
-                    application_number
+                    application_number,
+                    ct_ratio  # Added CT Ratio to the data
                 ]
                 
                 # Submit to Google Sheets
@@ -525,6 +534,7 @@ if 'final_msn' in locals() and final_msn:
                             <div><b>💡 फीडर कोड:</b><br>{feeder_code if 'feeder_code' in locals() else 'N/A'}</div>
                             <div><b>🧭 डीटीआर नाम:</b><br>{dtr if 'dtr' in locals() else 'N/A'}</div>
                             <div><b>🔢 डीटीआर MSN:</b><br>{final_msn}</div>
+                            <div><b>⚡ CT Ratio:</b><br>{ct_ratio}</div>
                             <div><b>⏰ बंद समय:</b><br>{dtr_off_time}</div>
                             <div><b>⚡ चालू समय:</b><br>{dtr_on_time}</div>
                             <div><b>📅 दिनांक:</b><br>{date.strftime('%d-%m-%Y')}</div>
