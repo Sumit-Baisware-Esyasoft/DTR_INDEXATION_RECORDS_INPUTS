@@ -182,7 +182,7 @@ hierarchy_df = load_hierarchy_data()
 
 # ----------------- SYSTEM INFORMATION SECTION -----------------
 st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
-st.markdown("### 🗂️ सिस्टम जानकारी | System Information (Last Update 28/09/2025")
+st.markdown("### 🗂️ सिस्टम जानकारी | System Information")
 
 if hierarchy_df is not None:
     with st.expander("🔽 विवरण चुनें | Select Details", expanded=True):
