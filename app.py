@@ -3,7 +3,37 @@ import pandas as pd
 from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import logging
+import os
+from datetime import datetime
 
+# ----------------- LOGGING SETUP -----------------
+def setup_logging():
+    """Setup logging configuration to track all application usage"""
+    # Create logs directory if it doesn't exist
+    if not os.path.exists('logs'):
+        os.makedirs('logs')
+    
+    # Configure logging
+    log_filename = f"logs/dtr_indexation_logs_{datetime.now().strftime('%Y%m')}.txt"
+    
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(log_filename, encoding='utf-8'),
+            logging.StreamHandler()  # Also print to console
+        ]
+    )
+    return logging.getLogger(__name__)
+
+# Initialize logger
+logger = setup_logging()
+
+# Add this at the beginning of your main code (after imports)
+logger.info("=" * 80)
+logger.info("DTR SMART METER INDEXING PORTAL STARTED")
+logger.info("=" * 80)
 # ----------------- PAGE CONFIG -----------------
 st.set_page_config(
     page_title="DTR Smart Meter Indexing Portal",
@@ -440,18 +470,18 @@ if 'final_msn' in locals() and final_msn:
     
     submit_clicked = st.button("🚀 डेटा सबमिट करें | Submit Data", use_container_width=True, type="primary")
     
-    if submit_clicked:
-        # Validation
-        errors = []
-        
-        if not ae_je_name:
-            errors.append("❌ कृपया अधिकारी का नाम दर्ज करें | Please enter officer name")
-        
-        if not mobile_number:
-            errors.append("❌ कृपया मोबाइल नंबर दर्ज करें | Please enter mobile number")
-        elif len(mobile_number) != 10 or not mobile_number.isdigit():
-            errors.append("❌ कृपया वैध 10-अंकीय मोबाइल नंबर दर्ज करें | Please enter valid 10-digit mobile number")
-        
+    
+if submit_clicked:
+    # Validation (keep your existing validation code)
+    errors = []
+    
+    if not ae_je_name:
+        errors.append("❌ कृपया अधिकारी का नाम दर्ज करें | Please enter officer name")
+    
+    if not mobile_number:
+        errors.append("❌ कृपया मोबाइल नंबर दर्ज करें | Please enter mobile number")
+    elif len(mobile_number) != 10 or not mobile_number.isdigit():
+        errors.append("❌ कृपया वैध 10-अंकीय मोबाइल नंबर दर्ज करें | Please enter valid 10-digit mobile number")
         # Time validation
         off_hour = st.session_state.get("off_hour", "01")
         off_minute = st.session_state.get("off_minute", "00")
@@ -477,12 +507,13 @@ if 'final_msn' in locals() and final_msn:
         
         if errors:
             for error in errors:
-                st.error(error)
+            st.error(error)
+            logger.warning(f"VALIDATION ERROR: {error}")
         else:
             try:
                 # Generate application number
                 application_number = f"{datetime.now().strftime('%d%m%Y')}{len(sheet.get_all_values()) + 1:04d}"
-                
+                logger.info(f"Generated Application Number: {application_number}")
                 # Prepare data for submission
                 new_data = [
                     region if 'region' in locals() else "",
@@ -504,16 +535,26 @@ if 'final_msn' in locals() and final_msn:
                     application_number,
                     ct_ratio  # Added CT Ratio to the data
                 ]
-                
-                # Submit to Google Sheets
-                if sheet:
-                    sheet.append_row(new_data)
-                
-                # SUCCESS MESSAGE
+                          # LOG THE SUBMISSION ATTEMPT
+            logger.info(f"SUBMISSION ATTEMPT - App No: {application_number}, Officer: {ae_je_name}, Mobile: {mobile_number}")
+            
+            # Submit to Google Sheets
+            if sheet:
+                sheet.append_row(new_data)
+                logger.info(f"DATA SAVED TO GOOGLE SHEETS - App No: {application_number}")
+            else:
+                logger.error("GOOGLE SHEETS CONNECTION FAILED - Data not saved")
+            
+            # SUCCESS MESSAGE
                 st.balloons()
                 st.markdown("<div class='custom-card success-card'>", unsafe_allow_html=True)
                 st.markdown("### 🎉 सफलता | Success!")
                 st.success("✅ डेटा सफलतापूर्वक सबमिट हो गया! | Data submitted successfully!")
+                # Submit to Google Sheets
+                logger.info(f"SUCCESSFUL SUBMISSION - App No: {application_number}, Region: {region}, Division: {division}, DTR: {dtr}, MSN: {final_msn}")
+                
+                # SUCCESS MESSAGE
+            
                 
                 # CONFIRMATION DETAILS
                 st.markdown(f"""
@@ -564,8 +605,8 @@ if 'final_msn' in locals() and final_msn:
                     </div>
                 """, unsafe_allow_html=True)
                 
-            except Exception as e:
-                st.error(f"❌ सबमिट करने में त्रुटि | Submission Error: {str(e)}")
+            # except Exception as e:
+            #     st.error(f"❌ सबमिट करने में त्रुटि | Submission Error: {str(e)}")
 
 # ----------------- FOOTER -----------------
 st.markdown("""
