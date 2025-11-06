@@ -507,7 +507,7 @@ if submit_clicked:
         
         if errors:
             for error in errors:
-            st.error(error)
+             st.error(error)
             logger.warning(f"VALIDATION ERROR: {error}")
         else:
             try:
