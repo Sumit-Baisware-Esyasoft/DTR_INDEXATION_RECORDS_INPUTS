@@ -173,9 +173,7 @@ except Exception as e:
 def load_hierarchy_data():
     try:
         hierarchy_path = r"DTR Master Information_05.xlsx"
-        df = pd.read_excel(hierarchy_path)
-        logger.info(f"Hierarchy data loaded successfully - {len(df)} records found")
-        return df
+        return pd.read_excel(hierarchy_path)
     except Exception as e:
         st.error(f"Error loading master file: {e}")
         return None
