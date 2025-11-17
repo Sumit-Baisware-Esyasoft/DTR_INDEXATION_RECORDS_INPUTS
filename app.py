@@ -3,37 +3,6 @@ import pandas as pd
 from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-import logging
-import os
-from datetime import datetime
-
-# ----------------- LOGGING SETUP -----------------
-def setup_logging():
-    """Setup logging configuration to track all application usage"""
-    # Create logs directory if it doesn't exist
-    if not os.path.exists('logs'):
-        os.makedirs('logs')
-    
-    # Configure logging
-    log_filename = f"logs/dtr_indexation_logs_{datetime.now().strftime('%Y%m')}.txt"
-    
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler(log_filename, encoding='utf-8'),
-            logging.StreamHandler()  # Also print to console
-        ]
-    )
-    return logging.getLogger(__name__)
-
-# Initialize logger
-logger = setup_logging()
-
-# Add this at the beginning of your main code (after imports)
-logger.info("=" * 80)
-logger.info("DTR SMART METER INDEXING PORTAL STARTED")
-logger.info("=" * 80)
 
 # ----------------- PAGE CONFIG -----------------
 st.set_page_config(
@@ -195,38 +164,31 @@ def get_google_sheet():
 
 try:
     sheet = get_google_sheet()
-    logger.info("Google Sheets connection established successfully")
 except Exception as e:
     st.error(f"Google Sheets connection failed: {e}")
-    logger.error(f"Google Sheets connection failed: {e}")
     sheet = None
 
 # ----------------- LOAD HIERARCHY -----------------
 @st.cache_data
 def load_hierarchy_data():
     try:
-        hierarchy_path = r"DTR Master Information_06.xlsx"
+        hierarchy_path = r"DTR Master Information_05.xlsx"
         df = pd.read_excel(hierarchy_path)
         logger.info(f"Hierarchy data loaded successfully - {len(df)} records found")
         return df
     except Exception as e:
         st.error(f"Error loading master file: {e}")
-        logger.error(f"Error loading master file: {e}")
         return None
 
 hierarchy_df = load_hierarchy_data()
-
-# ----------------- TRACK DROPDOWN SELECTIONS -----------------
-def log_dropdown_selection(level, value):
-    logger.info(f"USER SELECTION - {level}: {value}")
 
 # ----------------- SYSTEM INFORMATION SECTION -----------------
 st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
 st.markdown(f"### 🗂️ सिस्टम जानकारी | System Information")
 if hierarchy_df is not None:
-    st.markdown(f"Last Update 17/11/2025 12:00 PM ({hierarchy_df['Msn'].shape[0]}) Records Found")
+    st.markdown(f"Last Update 06/11/2025 12:00 PM ({hierarchy_df['Msn'].shape[0]}) Records Found")
 else:
-    st.markdown("Last Update 17/11/2025 12:00 PM (0) Records Found")
+    st.markdown("Last Update 06/11/2025 12:00 PM (0) Records Found")
 
 if hierarchy_df is not None:
     with st.expander("🔽 विवरण चुनें | Select Details", expanded=True):
@@ -252,8 +214,8 @@ if hierarchy_df is not None:
                 options=hierarchy_df["Region"].unique(),
                 index=0
             )
+            
             if region:
-                log_dropdown_selection("Region", region)
                 circle_options = hierarchy_df[hierarchy_df["Region"] == region]["Circle"].unique()
                 circle = st.selectbox(
                     "🏛️ सर्कल (Circle)", 
@@ -262,7 +224,6 @@ if hierarchy_df is not None:
                 )
                 
                 if circle:
-                    log_dropdown_selection("Circle", circle)
                     division_options = hierarchy_df[hierarchy_df["Circle"] == circle]["Division"].unique()
                     division = st.selectbox(
                         "🏢 डिवीजन (Division)", 
@@ -271,7 +232,6 @@ if hierarchy_df is not None:
                     )
                     
                     if division:
-                        log_dropdown_selection("Division", division)
                         substation_options = hierarchy_df[hierarchy_df["Division"] == division]["Sub station"].unique()
                         substation = st.selectbox(
                             "⚙️ उपकेंद्र (Substation)", 
@@ -281,7 +241,6 @@ if hierarchy_df is not None:
         
         with col2:
             if 'substation' in locals() and substation:
-                log_dropdown_selection("Substation", substation)
                 feeder_options = hierarchy_df[hierarchy_df["Sub station"] == substation]["Feeder"].unique()
                 feeder = st.selectbox(
                     "🔌 फीडर (Feeder)", 
@@ -290,7 +249,6 @@ if hierarchy_df is not None:
                 )
                 
                 if feeder:
-                    log_dropdown_selection("Feeder", feeder)
                     dtr_options = hierarchy_df[hierarchy_df["Feeder"] == feeder]["Dtr"].unique()
                     dtr = st.selectbox(
                         "🧭 डीटीआर का नाम (DTR Name)", 
@@ -299,7 +257,6 @@ if hierarchy_df is not None:
                     )
                     
                     if dtr:
-                        log_dropdown_selection("DTR", dtr)
                         feeder_code_options = hierarchy_df[hierarchy_df["Dtr"] == dtr]["Feeder code"].unique()
                         feeder_code = st.selectbox(
                             "💡 फीडर कोड (Feeder Code)", 
@@ -348,7 +305,6 @@ if hierarchy_df is not None and 'dtr_code' in locals() and dtr_code:
             if confirm == "हाँ, सही है ✅":
                 final_msn = msn_auto
                 st.success("✅ मीटर सीरियल नंबर स्वीकृत | Meter Serial Number Approved")
-                logger.info(f"MSN Auto-confirmed: {final_msn}")
             else:
                 new_msn = st.text_input(
                     "✏️ नया डीटीआर मीटर सीरियल नंबर दर्ज करें | Enter New DTR Meter Serial Number",
@@ -357,7 +313,6 @@ if hierarchy_df is not None and 'dtr_code' in locals() and dtr_code:
                 if new_msn:
                     final_msn = new_msn
                     st.success("✅ नया मीटर सीरियल नंबर स्वीकृत | New Meter Serial Number Approved")
-                    logger.info(f"MSN Manual entry: {final_msn}")
                 else:
                     final_msn = None
         else:
@@ -369,7 +324,6 @@ if hierarchy_df is not None and 'dtr_code' in locals() and dtr_code:
     
     except Exception as e:
         st.error(f"⚠️ MSN लोड करने में त्रुटि | Error loading MSN: {e}")
-        logger.error(f"MSN loading error: {e}")
         final_msn = st.text_input(
             "✏️ कृपया डीटीआर मीटर सीरियल नंबर दर्ज करें | Please enter DTR Meter Serial Number",
             placeholder="सीरियल नंबर दर्ज करें | Enter serial number"
@@ -382,7 +336,6 @@ if hierarchy_df is not None and 'dtr_code' in locals() and dtr_code:
         options=["(100/5A)", "(200/5A)", "(300/5A)", "(400/5A)", "(500/5A)", "(600/5A)"],
         index=0
     )
-    logger.info(f"CT Ratio selected: {ct_ratio}")
     
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -530,12 +483,10 @@ if 'final_msn' in locals() and final_msn:
         if errors:
             for error in errors:
                 st.error(error)
-                logger.warning(f"VALIDATION ERROR: {error}")
         else:
             try:
                 # Generate application number
                 application_number = f"{datetime.now().strftime('%d%m%Y')}{len(sheet.get_all_values()) + 1:04d}"
-                logger.info(f"Generated Application Number: {application_number}")
                 
                 # Prepare data for submission
                 new_data = [
@@ -556,29 +507,18 @@ if 'final_msn' in locals() and final_msn:
                     ae_je_name,
                     mobile_number,
                     application_number,
-                    ct_ratio
+                    ct_ratio  # Added CT Ratio to the data
                 ]
-                
-                # LOG THE SUBMISSION ATTEMPT
-                logger.info(f"SUBMISSION ATTEMPT - App No: {application_number}, Officer: {ae_je_name}, Mobile: {mobile_number}")
                 
                 # Submit to Google Sheets
                 if sheet:
                     sheet.append_row(new_data)
-                    logger.info(f"DATA SAVED TO GOOGLE SHEETS - App No: {application_number}")
-                    logger.info(f"COMPLETE DATA - Region: {region}, Circle: {circle}, Division: {division}, Substation: {substation}, Feeder: {feeder}, DTR: {dtr}, DTR Code: {dtr_code}, Feeder Code: {feeder_code}, MSN: {final_msn}, CT Ratio: {ct_ratio}, Off Time: {dtr_off_time}, On Time: {dtr_on_time}, Date: {date}, Officer: {ae_je_name}, Mobile: {mobile_number}")
-                else:
-                    logger.error("GOOGLE SHEETS CONNECTION FAILED - Data not saved")
-                    st.error("Google Sheets connection failed - data not saved")
                 
                 # SUCCESS MESSAGE
                 st.balloons()
                 st.markdown("<div class='custom-card success-card'>", unsafe_allow_html=True)
                 st.markdown("### 🎉 सफलता | Success!")
                 st.success("✅ डेटा सफलतापूर्वक सबमिट हो गया! | Data submitted successfully!")
-                
-                # LOG SUCCESS
-                logger.info(f"SUCCESSFUL SUBMISSION - App No: {application_number}, Region: {region}, Division: {division}, DTR: {dtr}, MSN: {final_msn}")
                 
                 # CONFIRMATION DETAILS
                 st.markdown(f"""
@@ -630,9 +570,7 @@ if 'final_msn' in locals() and final_msn:
                 """, unsafe_allow_html=True)
                 
             except Exception as e:
-                error_msg = f"SUBMISSION FAILED - App No: {application_number}, Error: {str(e)}"
                 st.error(f"❌ सबमिट करने में त्रुटि | Submission Error: {str(e)}")
-                logger.error(error_msg)
 
 # ----------------- FOOTER -----------------
 st.markdown("""
@@ -666,13 +604,3 @@ try:
         st.image("download (1).png", width=120, caption="Technology Partner: Esyasoft Technologies")
 except:
     pass
-
-# ----------------- APPLICATION STOP LOGGING -----------------
-import atexit
-
-def log_application_stop():
-    logger.info("=" * 80)
-    logger.info("DTR SMART METER INDEXING PORTAL STOPPED")
-    logger.info("=" * 80)
-
-atexit.register(log_application_stop)
