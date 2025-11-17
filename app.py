@@ -185,10 +185,7 @@ hierarchy_df = load_hierarchy_data()
 # ----------------- SYSTEM INFORMATION SECTION -----------------
 st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
 st.markdown(f"### 🗂️ सिस्टम जानकारी | System Information")
-if hierarchy_df is not None:
-    st.markdown(f"Last Update 06/11/2025 12:00 PM ({hierarchy_df['Msn'].shape[0]}) Records Found")
-else:
-    st.markdown("Last Update 06/11/2025 12:00 PM (0) Records Found")
+st.markdown(f"Last Update 06/11/2025 12:00 PM ({hierarchy_df['Msn'].shape[0]}) Records Found")
 
 if hierarchy_df is not None:
     with st.expander("🔽 विवरण चुनें | Select Details", expanded=True):
